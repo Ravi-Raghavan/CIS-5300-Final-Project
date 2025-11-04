@@ -54,7 +54,8 @@ data/
 
 
 > **Note to Grader:**  
-> Due to the large size of the full dataset, submitting the complete train-dev-test splits to Gradescope was not feasible. Instead, I sampled **1% of each dataset** for submission. You will find the following files in the archive:
+
+Due to the large size of the full dataset, submitting the complete train-dev-test splits to Gradescope was not feasible. Instead, I sampled **1% of each dataset** for submission. You will find the following files in the archive:
 
 ```text
 data_archive.tar.gz/
