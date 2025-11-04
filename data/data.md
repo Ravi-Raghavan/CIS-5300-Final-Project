@@ -51,17 +51,16 @@ data/
 ├── training_data_cleaned.csv
 ├── dev_data_cleaned.csv
 └── test_data_cleaned.csv
+```
 
-
-> **Note to Grader:**  
-
-Due to the large size of the full dataset, submitting the complete train-dev-test splits to Gradescope was not feasible. Instead, I sampled **1% of each dataset** for submission. You will find the following files in the archive:
+> **Note to Grader:** Due to the large size of the full dataset, submitting the complete train-dev-test splits to Gradescope was not feasible. Instead, I sampled **1% of each dataset** for submission. You will find the following files in the archive:
 
 ```text
 data_archive.tar.gz/
 ├── train_sampled.csv
 ├── dev_sampled.csv
 └── test_sampled.csv
+```
 
 Here are the number of samples in each of these files
 - **Sampled Training set:** (8809 posts)  
