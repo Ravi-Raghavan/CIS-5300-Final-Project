@@ -48,6 +48,27 @@ Each split is stored in its respective CSV file:
 
 ```text
 data/
-├── train.csv
-├── dev.csv
-└── test.csv
+├── training_data_cleaned.csv
+├── dev_data_cleaned.csv
+└── test_data_cleaned.csv
+
+
+> **Note to Grader:**  
+> Due to the large size of the full dataset, submitting the complete train-dev-test splits to Gradescope was not feasible. Instead, I sampled **1% of each dataset** for submission. You will find the following files in the archive:
+
+```text
+data_archive.tar.gz/
+├── train_sampled.csv
+├── dev_sampled.csv
+└── test_sampled.csv
+
+Here are the number of samples in each of these files
+- **Sampled Training set:** (8809 posts)  
+- **Sampled Development set (dev):**  (1101 posts)  
+- **Sampled Test set:** (1101 posts)  
+
+
+Here is the Google Drive link to the entire train, dev, and test splits whose files, as described earlier, are named
+training_data_cleaned.csv, dev_data_cleaned.csv, and test_data_cleaned.csv
+
+**Google Drive Link:** [Full Dataset Link] (https://drive.google.com/drive/folders/1An_FoKLB8422vAvH050zU21qLqOA5JXY?usp=drive_link)
