@@ -18,7 +18,7 @@ The dataset is provided in **TSV (tab-separated values) format**, with the follo
 
 > **Note to Grader:** We used the publicly available dataset, which includes 1,101,165 social media posts prior to splitting into train/dev/test sets.
 
-## Example Data
+## Example of the Data
 A small sample of the dataset is shown below.  
 > **Note to Grader:** Hypothetical examples are provided here to avoid graphic or profane content.
 
