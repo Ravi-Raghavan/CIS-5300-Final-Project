@@ -71,4 +71,4 @@ Here are the number of samples in each of these files
 Here is the Google Drive link to the entire train, dev, and test splits whose files, as described earlier, are named
 training_data_cleaned.csv, dev_data_cleaned.csv, and test_data_cleaned.csv
 
-**Google Drive Link:** [Full Dataset Link] (https://drive.google.com/drive/folders/1An_FoKLB8422vAvH050zU21qLqOA5JXY?usp=drive_link)
+**Google Drive Link:** [Full Dataset Link](https://drive.google.com/drive/folders/1An_FoKLB8422vAvH050zU21qLqOA5JXY?usp=drive_link)
