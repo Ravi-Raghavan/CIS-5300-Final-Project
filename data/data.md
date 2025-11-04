@@ -46,6 +46,7 @@ We ensure that the **same post does not appear in multiple splits**. This was st
 
 Each split is stored in its respective CSV file:
 
+```text
 data/
 ├── train.csv
 ├── dev.csv
