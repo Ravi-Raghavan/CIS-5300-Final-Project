@@ -1,4 +1,5 @@
 # Ignore data
 *.csv
 *.tsv
+*.gz
 
