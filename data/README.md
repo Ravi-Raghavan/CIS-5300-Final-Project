@@ -1,164 +1,87 @@
 ---
+license: cc-by-nc-sa-4.0
 task_categories:
 - text-classification
 language:
 - en
-tags:
-- hate speech
+pretty_name: MetaHate
 size_categories:
-- 100K<n<1M
-extra_gated_prompt: "You agree to not use the dataset to conduct any activity that causes harm to human subjects."
+- 1M<n<10M
+extra_gated_prompt: "Terms of Use for MetaHate."
 extra_gated_fields:
-  Please provide more information on why you need this dataset and how you plan to use it:
-    type: text
+  Name: text
+  Surname: text
+  Institution or organization: text
+  Address: text
+  Country: country
+  Telephone: text
+  Email address:  text
+  How do you plan to use this dataset?: text
+  I confirm I will use this dataset for academic and research purposes and I acknowledge that using this dataset for commercial purposes is prohibited: checkbox
+  I confirm that I will not use this dataset to conduct any activity that causes harm to human subjects: checkbox
+  I confirm that I will not try to identify the individuals whose texts are included in this dataset: checkbox
+  I confirm that I will not share or redistribute this dataset with others: checkbox
+  I confirm that if I violate any of these points access to the data will be revoked: checkbox
+  I confirm that I will cite the reference below if I use this dataset: checkbox
+  I understand that this agreement gives access to the publicly available part of MetaHate and the remaining instances require extra consent that is described in MetaHate_full_ToS: checkbox
 ---
+# MetaHate: A Dataset for Unifying Efforts on Hate Speech Detection
+This is MetaHate: a meta-collection of 36 hate speech datasets from social media comments.
 
-# English Hate Speech Superset
+## Dataset Structure
+The dataset contains 1,226,202 social media posts in a TSV file. Each element contains the following fields:
 
 
-This dataset is a superset (N=360,493) of posts annotated as hateful or not. It results from the preprocessing and merge of all available English hate speech datasets in April 2024. These datasets were identified through a systematic survey of hate speech datasets conducted in early 2024. We only kept datasets that:
-- are documented
-- are publicly available
-- focus on hate speech, defined broadly as "any kind of communication in speech, writing or behavior, that attacks or uses pejorative or discriminatory language with reference to a person or a group on the basis of who they are, in other words, based on their religion, ethnicity, nationality, race, color, descent, gender or other identity factor" (UN, 2019)
+| Field Name | Type | Possible Values | Description                                                          |
+|------------|------|-----------------|----------------------------------------------------------------------|
+| text       | str  | any             | Social media post. Each post is unique.            |
+| label      | int  | 0, 1            | Label of the post. 0 for non-hate speech posts, 1 for hate speech.   |
 
-The survey procedure is further detailed in [our survey paper](https://aclanthology.org/2024.woah-1.23/).
+## Usage
+In order to use MetaHate you need to agree to our Terms and Conditions. Access to the complete meta-collection (1,226,202) will be granted only upon the submission of all relevant agreements for the derived datasets. Otherwise, we will only provide the access to the publicly available datasets (1,101,165 instances).
 
-## Data access and intended use
-Please send an access request detailing how you plan to use the data. The main purpose of this dataset is to train and evaluate hate speech detection models, as well as study hateful discourse online. This dataset is NOT intended to train generative LLMs to produce hateful content. 
+To access the full data, we require the original Terms of Use of the following works:
 
-## Columns
+- [A Large Labeled Corpus for Online Harassment Research (Golbeck et al. 2017)](https://doi.org/10.1145/3091478.3091509)
+- [The 'Call me sexist but' Dataset (Samory et al. 2021)](https://search.gesis.org/research_data/SDN-10.7802-2251)
+- [Are You a Racist or Am I Seeing Things? Annotator Influence on Hate Speech Detection on Twitter (Waseem 2016)](https://doi.org/10.18653/v1/W16-5618)
+- [Hateful Symbols or Hateful People? Predictive Features for Hate Speech Detection on Twitter (Waseem and Hovy 2016)](https://doi.org/10.18653/v1/N16-2013)
+- [Aggression-annotated Corpus of Hindi-English Code-mixed Data (Kumar et al. 2018)](https://aclanthology.org/L18-1226)
+- [#MeTooMA: Multi-Aspect Annotations of Tweets Related to the MeToo Movement (Gautam et al. 2020)](https://doi.org/10.1609/icwsm.v14i1.7292)
+- [Pinpointing Fine-Grained Relationships between Hateful Tweets and Replies (Albanyan and Blanco 2022)](https://doi.org/10.1609/aaai.v36i10.21284)
+- [Large-Scale Hate Speech Detection with Cross-Domain Transfer (Toraman, Şahinuç, and Yilmaz 2022)](https://aclanthology.org/2022.lrec-1.238)
+- [Developing a Multilingual Annotated Corpus of Misogyny and Aggression (Bhattacharya et al. 2020)](https://aclanthology.org/2020.trac-1.25)
 
-The dataset contains six columns:
-- `text`: the annotated post
-- `labels`: annotation of whether the post is hateful (`== 1`) or not (`==0`). As datasets have different annotation schemes, we systematically binarized the labels.
-- `source`: origin of the data (e.g., Twitter)
-- `dataset`: dataset the data is from (see "Datasets" part below)
-- `nb_annotators`: number of annotators by post
-- `post_author_country_location`: post author country location, when it could be inferred. Details on the inference in [our survey paper](https://aclanthology.org/2024.woah-1.23/).
+Send these agreements to paloma.piot@udc.es to access the full data.
 
-## Datasets
+## Disclaimer
+This dataset includes content that may contain hate speech, offensive language, or other forms of inappropriate and objectionable material. The content present in the dataset is not created or endorsed by the authors or contributors of this project. It is collected from various sources and does not necessarily reflect the views or opinions of the project maintainers.
 
-The datasets that compose this superset are:
-- Automated Hate Speech Detection and the Problem of Offensive Language (`davidson` in the `dataset` column)
-  - [paper link](https://ojs.aaai.org/index.php/ICWSM/article/view/14955/14805)
-  - [raw data link](https://github.com/t-davidson/hate-speech-and-offensive-language)
-- When Does a Compliment Become Sexist? Analysis and Classification of Ambivalent Sexism Using Twitter Data (`compliment_sexist` in the `dataset` column)
-  - [paper link](https://aclanthology.org/W17-2902/)
-  - [raw data link](https://github.com/AkshitaJha/NLP_CSS_2017)
-- Detecting Online Hate Speech Using Context Aware Models (`fox_news`)
-  - [paper link](https://aclanthology.org/R17-1036/)
-  - [raw data link](https://github.com/sjtuprog/fox-news-comments/blob/master/fox-news-comments.json)
-- Hate Speech Dataset from a White Supremacy Forum (`white_supremacy`)
-  - [paper link](https://www.aclweb.org/anthology/W18-5102.pdf)
-  - [raw data link](https://github.com/Vicomtech/hate-speech-dataset)
-- Peer to Peer Hate: Hate Speech Instigators and Their Targets (`melsherief`)
-  - [paper link](https://ojs.aaai.org/index.php/ICWSM/article/view/15038/14888)
-  - [raw data link](https://github.com/melsherief/hate_speech_icwsm18)
-- Hate Lingo: A Target-based Linguistic Analysis of Hate Speech in Social Media (`melsherief`)
-  - [paper link](https://ojs.aaai.org/index.php/ICWSM/article/view/15041)
-  - [raw data link](https://github.com/melsherief/hate_speech_icwsm18)
-- Anatomy of Online Hate: Developing a Taxonomy and Machine Learning Models for Identifying and Classifying Hate in Online News Media (`anatomy_online_hate`)
-  - [paper link](https://ojs.aaai.org/index.php/ICWSM/article/view/15028/14878)
-  - [raw data link](https://www.dropbox.com/s/21wtzy9arc5skr8/ICWSM18%20-%20SALMINEN%20ET%20AL.xlsx?dl=0)
-- CONAN - COunter NArratives through Nichesourcing: a Multilingual Dataset of Responses to Fight Online Hate Speech (`CONAN`)
-  - [paper link](https://www.aclweb.org/anthology/P19-1271.pdf)
-  - [raw data link](https://github.com/marcoguerini/CONAN)
-- A Benchmark Dataset for Learning to Intervene in Online Hate Speech (`benchmark`)
-  - [paper link](https://aclanthology.org/D19-1482/)
-  - [raw data link](https://github.com/jing-qian/A-Benchmark-Dataset-for-Learning-to-Intervene-in-Online-Hate-Speech)
-- Multilingual and Multi-Aspect Hate Speech Analysis (`MLMA`)
-  - [paper link](https://aclanthology.org/D19-1474/)
-  - [raw data link](https://huggingface.co/datasets/nedjmaou/MLMA_hate_speech)
-- Overview of the HASOC track at FIRE 2019: Hate Speech and Offensive Content Identification in Indo-European Languages (`hasoc`)
-  - [paper link](https://dl.acm.org/doi/pdf/10.1145/3368567.3368584?download=true)
-  - [raw data link](https://hasocfire.github.io/hasoc/2019/dataset.html)
-- Constructing interval variables via faceted Rasch measurement and multitask deep learning: a hate speech application (`measuring-hate-speech`)
-  - [paper link](https://arxiv.org/abs/2009.10277)
-  - [raw data link](https://huggingface.co/datasets/ucberkeley-dlab/measuring-hate-speech)
-- Detecting East Asian Prejudice on Social media (`east_asian`)
-  - [paper link](https://aclanthology.org/2020.alw-1.19/)
-  - [raw data link](https://zenodo.org/records/3816667)
-- Learning from the Worst: Dynamically Generated Datasets to Improve Online Hate Detection (`learning from the worst`)
-  - [paper link](https://aclanthology.org/2021.acl-long.132/)
-  - [raw data link](https://raw.githubusercontent.com/bvidgen/Dynamically-Generated-Hate-Speech-Dataset/main/Dynamically%20Generated%20Hate%20Dataset%20v0.2.2.csv)
-- HateXplain: A Benchmark Dataset for Explainable Hate Speech Detection (`hatexplain`)
-  - [paper link](https://arxiv.org/abs/2012.10289)
-  - [raw data link](https://github.com/hate-alert/HateXplain/tree/master/Data)
-- An Expert Annotated Dataset for the Detection of Online Misogyny (`online-misogyny`)
-  - [paper link](https://aclanthology.org/2021.eacl-main.114/)
-  - [raw data link](https://github.com/ellamguest/online-misogyny-eacl2021/blob/main/data/final_labels.csv)
-- Introducing CAD: the Contextual Abuse Dataset (`CAD`)
-  - [paper link](https://aclanthology.org/2021.naacl-main.182.pdf)
-  - [raw data link](https://zenodo.org/records/4881008)
-- Hatemoji: A Test Suite and Adversarially-Generated Dataset for Benchmarking and Detecting Emoji-based Hate (`hatemoji-build`)
-  - [paper link](https://aclanthology.org/2022.naacl-main.97/)
-  - [raw data link](https://github.com/HannahKirk/Hatemoji)
-- The Gab Hate Corpus: A collection of 27k posts annotated for hate speech (`GHC`)
-  - [paper link](https://link.springer.com/article/10.1007/s10579-021-09569-x)
-  - [raw data link](https://osf.io/edua3/)
-- ETHOS: an Online Hate Speech Detection Dataset (`ETHOS`)
-  - [paper link](https://arxiv.org/pdf/2006.08328.pdf)
-  - [raw data link](https://github.com/intelligence-csd-auth-gr/Ethos-Hate-Speech-Dataset)
-- Analyzing the Proliferation of Hate Speech in Parler (`Parler`)
-  - [paper link](https://aclanthology.org/2022.woah-1.11.pdf)
-  - [raw data link](https://github.com/NasLabBgu/parler-hate-speech/blob/main/parler_annotated_data.csv)
-- SemEval-2023 Task 10: Explainable Detection of Online Sexism (`EDOS`)
-  - [paper link](https://aclanthology.org/2023.semeval-1.305/)
-  - [raw data link](https://github.com/rewire-online/edos)
-    
-## Additional datasets on demand
-In our survey, we identified six additional datasets that are not public but can be requested to the authors. The full list is:
-- Hateful Symbols or Hateful People? Predictive Features for Hate Speech Detection on Twitter
-  - [paper link](https://www.aclweb.org/anthology/N16-2013)
-  - [request link here](https://github.com/ZeerakW/hatespeech)
-- Are You a Racist or Am I Seeing Things? Annotator Influence on Hate Speech Detection on Twitter
-  - [paper link](https://aclanthology.org/W16-5618/)
-  - [request link here](https://github.com/ZeerakW/hatespeech)
-- Large Scale Crowdsourcing and Characterization of Twitter Abusive Behavior
-  - [paper link](https://arxiv.org/pdf/1802.00393.pdf)
-  - [request link here](https://dataverse.mpi-sws.org/dataset.xhtml?persistentId=doi:10.5072/FK2/ZDTEMN)
-- hatEval, SemEval-2019 Task 5: Multilingual Detection of Hate Speech Against Immigrants and Women in Twitter
-  - [paper link](https://www.aclweb.org/anthology/S19-2007)
-  - [request link here](https://hatespeechdata.com/competitions.codalab.org/competitions/19935)
-- “Call me sexist, but...” : Revisiting Sexism Detection Using Psychological Scales and Adversarial Samples 
-  - [paper link](https://ojs.aaai.org/index.php/ICWSM/article/view/18085/17888)
-  - [request link here](https://doi.org/10.7802/2251)
-- Large-Scale Hate Speech Detection with Cross-Domain Transfer
-  - [paper link](https://aclanthology.org/2022.lrec-1.238/)
-  - [request link here](https://github.com/avaapm/hatespeech)
+The purpose of using this dataset is for research, analysis, or educational purposes only. The authors do not endorse or promote any harmful, discriminatory, or offensive behaviour conveyed in the dataset.
 
-## Preprocessing
+Users are advised to exercise caution and sensitivity when interacting with or interpreting the dataset. If you choose to use the dataset, it is recommended to handle the content responsibly and in compliance with ethical guidelines and applicable laws.
 
-We drop duplicates. In case of non-binary labels, the labels are binarized (hate speech or not). We replace all usernames and links by fixed tokens to maximize user privacy. Further details on preprocessing can be found in the preprocessing code [here](https://github.com/manueltonneau/hs_geographic_survey).
-
+The project maintainers disclaim any responsibility for the content within the dataset and cannot be held liable for how it is used or interpreted by others.
 
 ## Citation
-Please cite our [survey paper](https://aclanthology.org/2024.woah-1.23/) if you use this dataset.
+
+If you use this dataset, please cite the following reference:
 
 ```bibtex
-@inproceedings{tonneau-etal-2024-languages,
-    title = "From Languages to Geographies: Towards Evaluating Cultural Bias in Hate Speech Datasets",
-    author = {Tonneau, Manuel  and
-      Liu, Diyi  and
-      Fraiberger, Samuel  and
-      Schroeder, Ralph  and
-      Hale, Scott  and
-      R{\"o}ttger, Paul},
-    editor = {Chung, Yi-Ling  and
-      Talat, Zeerak  and
-      Nozza, Debora  and
-      Plaza-del-Arco, Flor Miriam  and
-      R{\"o}ttger, Paul  and
-      Mostafazadeh Davani, Aida  and
-      Calabrese, Agostina},
-    booktitle = "Proceedings of the 8th Workshop on Online Abuse and Harms (WOAH 2024)",
-    month = jun,
-    year = "2024",
-    address = "Mexico City, Mexico",
-    publisher = "Association for Computational Linguistics",
-    url = "https://aclanthology.org/2024.woah-1.23",
-    pages = "283--311",
-    abstract = "Perceptions of hate can vary greatly across cultural contexts. Hate speech (HS) datasets, however, have traditionally been developed by language. This hides potential cultural biases, as one language may be spoken in different countries home to different cultures. In this work, we evaluate cultural bias in HS datasets by leveraging two interrelated cultural proxies: language and geography. We conduct a systematic survey of HS datasets in eight languages and confirm past findings on their English-language bias, but also show that this bias has been steadily decreasing in the past few years. For three geographically-widespread languages{---}English, Arabic and Spanish{---}we then leverage geographical metadata from tweets to approximate geo-cultural contexts by pairing language and country information. We find that HS datasets for these languages exhibit a strong geo-cultural bias, largely overrepresenting a handful of countries (e.g., US and UK for English) relative to their prominence in both the broader social media population and the general population speaking these languages. Based on these findings, we formulate recommendations for the creation of future HS datasets.",
+@article{Piot_Martín-Rodilla_Parapar_2024,
+  title={MetaHate: A Dataset for Unifying Efforts on Hate Speech Detection},
+  volume={18},
+  url={https://ojs.aaai.org/index.php/ICWSM/article/view/31445},
+  DOI={10.1609/icwsm.v18i1.31445},
+  abstractNote={Hate speech represents a pervasive and detrimental form of online discourse, often manifested through an array of slurs, from hateful tweets to defamatory posts. As such speech proliferates, it connects people globally and poses significant social, psychological, and occasionally physical threats to targeted individuals and communities. Current computational linguistic approaches for tackling this phenomenon rely on labelled social media datasets for training. For unifying efforts, our study advances in the critical need for a comprehensive meta-collection, advocating for an extensive dataset to help counteract this problem effectively. We scrutinized over 60 datasets, selectively integrating those pertinent into MetaHate. This paper offers a detailed examination of existing collections, highlighting their strengths and limitations. Our findings contribute to a deeper understanding of the existing datasets, paving the way for training more robust and adaptable models. These enhanced models are essential for effectively combating the dynamic and complex nature of hate speech in the digital realm.},
+  number={1},
+  journal={Proceedings of the International AAAI Conference on Web and Social Media},
+  author={Piot, Paloma and Martín-Rodilla, Patricia and Parapar, Javier},
+  year={2024},
+  month={May},
+  pages={2025-2039}
 }
-
 ```
+
+## Acknowledgements
+The authors thank the funding from the Horizon Europe research and innovation programme under the Marie Skłodowska-Curie Grant Agreement No. 101073351. The authors also thank the financial support supplied by the Consellería de Cultura, Educación, Formación Profesional e Universidades (accreditation 2019-2022 ED431G/01, ED431B 2022/33) and the European Regional Development Fund, which acknowledges the CITIC Research Center in ICT of the University of A Coruña as a Research Center of the Galician University System and the project PID2022-137061OB-C21 (Ministerio de Ciencia e Innovación, Agencia Estatal de Investigación, Proyectos de Generación de Conocimiento; supported by the European Regional Development Fund). The authors also thank the funding of project PLEC2021-007662 (MCIN/AEI/10.13039/501100011033, Ministerio de Ciencia e Innovación, Agencia Estatal de Investigación, Plan de Recuperación, Transformación y Resiliencia, Unión Europea-Next Generation EU).
