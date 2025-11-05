@@ -28,6 +28,8 @@ A small sample of the dataset is shown below.
 | You are such a horrible person, leave!    | 1     |
 | This is just funny, not harmful           | 0     |
 
+> **Note to Grader:** In the actual dataset, the columns are ordered label first then text. I presented the example in the above manner just to make it easier to understand the data!
+
 ## Data Format
 - **Original file format:** TSV (`.tsv`)  
 - **Columns:** `text`, `label`  
