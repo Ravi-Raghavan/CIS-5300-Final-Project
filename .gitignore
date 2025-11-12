@@ -1,4 +1,9 @@
 # Ignore data
-*.csv
-*.tsv
+available_metahate.tsv
+data_archive.tar.gz
+dev_data_cleaned.csv
+test_data_cleaned.csv
+training_data_cleaned.csv
+
+test/
 
