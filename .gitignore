@@ -7,3 +7,7 @@ training_data_cleaned.csv
 
 test/
 
+# Don't save model checkpoint/final data
+Milestone2-Baseline-BERT-FineTuning/
+Milestone2-Baseline-BERT-FinalModel/
+
