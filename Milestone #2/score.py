@@ -1,0 +1,30 @@
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import numpy as np
+
+# --- Compute Metrics (Accuracy, Precision, Recall, and F1 Score) ---
+def compute_metrics(y_true, y_pred):
+    acc = accuracy_score(y_true, y_pred)
+    pos_precision = precision_score(y_true, y_pred, pos_label = 1, zero_division=0)
+    pos_recall = recall_score(y_true, y_pred, pos_label = 1, zero_division=0)
+    neg_precision = precision_score(y_true, y_pred, pos_label = 0, zero_division=0)
+    neg_recall = recall_score(y_true, y_pred, pos_label = 0, zero_division=0)
+    pos_f1 = f1_score(y_true, y_pred, average = "binary", pos_label = 1, zero_division=0)
+    neg_f1 = f1_score(y_true, y_pred, average = "binary", pos_label = 0, zero_division=0)
+    f1_macro = f1_score(y_true, y_pred, average='macro', zero_division=0)
+    f1_micro = f1_score(y_true, y_pred, average='micro', zero_division=0)
+    f1_weighted = f1_score(y_true, y_pred, average='weighted', zero_division=0)
+    return acc, pos_precision, pos_recall, neg_precision, neg_recall, pos_f1, neg_f1, f1_macro, f1_micro, f1_weighted
+
+# --- Test Values ---
+y_true = np.array([0, 0, 1, 1, 0, 1, 0, 1])
+y_pred = np.array([0, 1, 1, 1, 0, 0, 0, 1])
+
+# --- Compute metrics ---
+metrics = compute_metrics(y_true, y_pred)
+
+# --- Print metrics ---
+metric_names = ["Accuracy", "Pos Precision", "Pos Recall", "Neg Precision", "Neg Recall", 
+                "Pos F1", "Neg F1", "F1 Macro", "F1 Micro", "F1 Weighted"]
+
+for name, value in zip(metric_names, metrics):
+    print(f"{name}: {value:.4f}")
