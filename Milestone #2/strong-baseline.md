@@ -27,7 +27,7 @@ To get these metrics simply run:
 
 ```python
 generate_evaluation_results("test")
-```python
+```
 
 ## Generating Sample Predictions
 The model can also generate predictions for individual text samples. For example:
