@@ -26,5 +26,6 @@ These results demonstrate that the fine-tuned BERT model substantially outperfor
 ## Generating Sample Predictions
 The model can also generate predictions for individual text samples. For example:
 
-Input: ""
-Output: ""
+Input: "You people should go back to your disgusting countries"
+
+Output: "1" (Hate Speech)
