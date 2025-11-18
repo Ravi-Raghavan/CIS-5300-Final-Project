@@ -29,7 +29,7 @@ To get these metrics simply run:
 generate_evaluation_results("test")
 ```
 
-## Generating Sample Predictions
+## Sample Inputs and Outputs
 The model can also generate predictions for individual text samples. For example:
 
 Input: "You people should go back to your disgusting countries"
