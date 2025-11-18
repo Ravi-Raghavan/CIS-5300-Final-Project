@@ -23,6 +23,12 @@ After training, the model is evaluated on the held-out **test set**. The evaluat
 
 These results demonstrate that the fine-tuned BERT model substantially outperforms the majority-class baseline, establishing a strong performance threshold for future models.
 
+To get these metrics simply run:
+
+```python
+generate_evaluation_results("test")
+```python
+
 ## Generating Sample Predictions
 The model can also generate predictions for individual text samples. For example:
 
