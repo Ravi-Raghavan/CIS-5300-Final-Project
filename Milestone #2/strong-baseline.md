@@ -15,7 +15,7 @@ To address the class imbalance in the dataset—where hateful posts make up only
 During training, the model is evaluated periodically on the development set to track performance.
 
 ## Evaluation and Metrics
-After training, the model is evaluated on the held-out **test set**. The evaluation uses a scoring function to report detailed metrics including accuracy, precision, recall, and F1 for both classes. The test-set performance of the strong baseline is:
+After training, the model is evaluated on the held-out **test set**. The evaluation uses a scoring function (i.e. `compute_metrics`) to report detailed metrics including accuracy, precision, recall, and F1 for both classes. The test-set performance of the strong baseline is:
 
 - **F1 (Hate):** 0.712  
 
