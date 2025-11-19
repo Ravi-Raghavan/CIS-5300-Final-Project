@@ -9,7 +9,7 @@ This baseline model is a simple **majority-class classifier** that ignores all t
 Please make sure to have the training data (`train_data.csv`), validation data (`dev_data.csv`), and test data (`test_data.csv`) arranged 
 according to the following folder structure
 
-📁 Folder Structure
+Folder Structure
 ```text
 ├── data/
 │   ├── train_data.csv
@@ -19,7 +19,7 @@ according to the following folder structure
 │   ├── simple-baseline.py # Script for Simple baseline
 ```
 
-▶️ Running the Script
+Running the Script
 
 To execute the Majority Class classifier, execute the following command from within the src folder
 
