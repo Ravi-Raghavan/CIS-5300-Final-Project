@@ -1,5 +1,6 @@
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import numpy as np
+import argparse
 
 # --- Compute Metrics (Accuracy, Precision, Recall, and F1 Score) ---
 def compute_metrics(y_true, y_pred):
@@ -15,9 +16,15 @@ def compute_metrics(y_true, y_pred):
     f1_weighted = f1_score(y_true, y_pred, average='weighted', zero_division=0)
     return acc, pos_precision, pos_recall, neg_precision, neg_recall, pos_f1, neg_f1, f1_macro, f1_micro, f1_weighted
 
-# --- Test Values ---
-y_true = np.array([0, 0, 1, 1, 0, 1, 0, 1])
-y_pred = np.array([0, 1, 1, 1, 0, 0, 0, 1])
+# Parse arguments from command line
+parser = argparse.ArgumentParser()
+parser.add_argument('--true_labels', nargs='+', type=int, required=True, help='List of ground truth labels')
+parser.add_argument('--pred_labels', nargs='+', type=int, required=True, help='List of predicted labels')
+args = parser.parse_args()
+
+# --- Ground Truth and Predicted Labels  ---
+y_true = np.array(args.true_labels)
+y_pred = np.array(args.pred_labels)
 
 # --- Compute metrics ---
 metrics = compute_metrics(y_true, y_pred)

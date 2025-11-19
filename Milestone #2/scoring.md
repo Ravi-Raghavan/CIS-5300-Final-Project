@@ -1,30 +1,41 @@
-# Description
-This project uses a set of standard evaluation metrics to compare the simple majority-class baseline with the stronger transformer-based classifier, with a focus on imbalanced text classification where hate speech examples are much less frequent. Because accuracy alone can be misleading when one class dominates the dataset, we rely on precision, recall, F1 scores, and aggregated measures to evaluate how well each model identifies hate speech while avoiding unnecessary misclassification of non-hate text.
-<br>
-Accuracy measures the proportion of correct predictions, but it can be misleading when most samples belong to the non-hate class. To evaluate hate-speech detection directly, positive precision shows how often predicted hate is truly hate, while positive recall shows how many actual hate-speech examples the model successfully finds. Their combination, the positive F1 score, balances these two aspects and is especially important for minority-class evaluation. Likewise, negative precision, negative recall, and negative F1 capture the model’s reliability on non-hate examples and help ensure that improvements in detecting hate speech do not come at the cost of mislabeling harmless content. We also compute macro-F1 to average the F1 score of each class equally, micro-F1 to compute F1 on all aggregated predictions, and weighted-F1 to average class F1 scores in proportion to class frequency.
+# Description of Evaluation Measure
+This project focuses on leveraging state-of-the-art (SOTA) NLP techniques for hate speech detection using the MetaHate dataset, a unified benchmark for this task. Specifically, given a social media post, the goal is to classify it as hateful or non-hateful. Since this is a binary classification problem, the F1 score will be used as the primary evaluation metric, as it balances Precision and Recall—two critical aspects in hate speech detection. Recall captures the proportion of actual hate speech posts correctly identified by the model, ensuring harmful content is not overlooked. Precision measures the proportion of posts labeled as hate speech that are truly hateful, reducing the risk of mislabeling benign content and unnecessarily restricting users’ expression. For social media platforms represented in the MetaHate dataset, both metrics are essential: missing hate speech allows harmful content to spread, while false positives can unfairly penalize users. Striking the right balance ensures the platform remains safe and inclusive without over-censoring legitimate expression, maintaining trust and engagement among users. In this work, the F1 score is computed specifically for the hate speech class (labeled as 1 in our dataset), as correctly identifying hateful content is our primary concern.
 
+Mathematically, Precision, Recall, and F1 score are defined as follows: 
+$$
+\text{Precision} = \frac{TP}{TP + FP}, \quad
+\text{Recall} = \frac{TP}{TP + FN}, \quad
+\text{F1 score} = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
+$$
 
+where TP, FP, and FN denote the number of true positives, false positives, and false negatives, respectively. The F1 score provides a single metric that balances Precision and Recall, making it particularly suitable for tasks like hate speech detection where both false negatives and false positives carry significant consequences.
 
-# Running the scoring script
+We want to note that accuracy alone is insufficient in this scenario because the dataset is imbalanced, with only about 20% of posts labeled as hate speech. A naive classifier that always predicts “non-hateful” could achieve 80% accuracy without detecting any actual hate speech. By using the F1 score as the primary metric, we ensure that the model’s performance reflects its ability to correctly identify hateful content while minimizing false positives, providing a more meaningful evaluation for this imbalanced dataset.
 
-You can run the scoring script by supplying two CSV files that each contain a single column of labels (0 or 1). The script will load the labels, compute all evaluation metrics, and print them in the format shown below. The following example assumes `true_labels.csv` contains:
+To conclude, we note that our strong baseline draws direct inspiration from the paper MetaHate: A Dataset for Unifying Efforts on Hate Speech Detection, which fine-tunes a BERT model on the MetaHate dataset. In their experiments, they also use F1 score as an evaluation metric, emphasizing its importance for balancing Precision and Recall in hate speech detection tasks. 
 
-`0, 0, 1, 1, 0, 1, 0, 1`
+# Hate Speech Evaluation Metrics: Literature Review
+In this section, we review prior works that utilize the F1 score as a primary evaluation metric for hate speech detection:
+- [MetaHate: A Dataset for Unifying Efforts on Hate Speech Detection](https://arxiv.org/pdf/2401.06526)
+- [Advancing Hate Speech Detection with Transformers: Insights from the MetaHate](https://arxiv.org/pdf/2508.04913)
 
-and `pred_labels.csv` contains:
+Both studies leverage the MetaHate dataset and report the F1 score to assess the effectiveness of their proposed approaches in identifying hate speech.
 
-`0, 1, 1, 1, 0, 0, 0, 1`
+# Running score.py
+You can pass lists of ground truth and predicted labels directly as command-line arguments. Each list should contain integers `0` or `1`, where:
 
+- `0` represents a non-hateful post  
+- `1` represents a hateful post  
 
-### Example arguments
+## Example Command
 
 ```bash
-python scoring.py \
-    --true_labels ./results/true_labels.csv \
-    --pred_labels ./results/pred_labels.csv
+python score.py \
+    --true_labels 0 0 1 1 0 1 0 1  \
+    --pred_labels 0 1 1 1 0 0 0 1
 ```
 
-### Example outputs
+## Example outputs
 
 ```
 Accuracy: 0.7500
@@ -38,3 +49,19 @@ F1 Macro: 0.7500
 F1 Micro: 0.7500
 F1 Weighted: 0.7500
 ```
+
+### Output Interpretation
+
+- **Accuracy:** Overall proportion of correctly classified posts (both hateful and non-hateful).  
+- **Pos Precision:** Of the posts predicted as hateful (`1`), the fraction that are actually hateful. Formula: `TP / (TP + FP)`.  
+- **Pos Recall:** Of all truly hateful posts, the fraction correctly identified as hateful. Formula: `TP / (TP + FN)`.  
+- **Neg Precision:** Of the posts predicted as non-hateful (`0`), the fraction that are actually non-hateful. Formula: `TN / (TN + FN)`.  
+- **Neg Recall:** Of all truly non-hateful posts, the fraction correctly identified as non-hateful. Formula: `TN / (TN + FP)`.  
+- **Pos F1:** F1 score for the hateful class, harmonic mean of Pos Precision and Pos Recall. Formula: `2 * (Precision * Recall) / (Precision + Recall)`.  
+- **Neg F1:** F1 score for the non-hateful class, harmonic mean of Neg Precision and Neg Recall.  
+- **F1 Macro:** Average of Pos F1 and Neg F1, treating both classes equally regardless of class frequency.  
+- **F1 Micro:** Global F1 considering total true positives, false positives, and false negatives across all classes.  
+- **F1 Weighted:** Average of Pos F1 and Neg F1 weighted by the number of instances in each class.
+
+
+**__Note to Grader:__** While the script returns multiple evaluation metrics, our primary metric for assessing model performance is the F1 score. The other metrics are provided solely for additional analysis.
