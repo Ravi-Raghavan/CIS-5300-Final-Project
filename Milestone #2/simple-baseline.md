@@ -6,12 +6,26 @@ This baseline model is a simple **majority-class classifier** that ignores all t
 
 ## Sample Inputs and Outputs
 
-Inputs: train_data.csv (assume majority class label is 0), test_data.csv, dev_data.csv all in directory
+Please make sure to have the training data (`train_data.csv`), validation data (`dev_data.csv`), and test data (`test_data.csv`) arranged 
+according to the following folder structure
+
+📁 Folder Structure
+```text
+├── data/
+│   ├── train_data.csv
+│   ├── dev_data.csv
+│   └── test_data.csv
+├── src/
+│   ├── simple-baseline.py # Script for Simple baseline
+```
+
+▶️ Running the Script
+
+To execute the Majority Class classifier, execute the following command from within the src folder
 
 ```
 python simple-baseline.py
 ```
-
 
 Outputs:
 
@@ -24,8 +38,6 @@ Saved prediction files:
 ```
 
 The script first loads the training data and determines that the majority class label in the training set is 0. It then applies this majority-class prediction rule to the train, dev, and test splits, producing one prediction per row in each dataset. These predictions, which are formatted as numpy arrays, are saved as .npy files named simple-baseline-train-preds.npy, simple-baseline-dev-preds.npy, and simple-baseline-test-preds.npy. Each file contains an array of 0's (majority class in training set) matching the length of the corresponding dataset. For test set, evaluation, "simple-baseline-test-preds.npy" can be passed into **score.py** with "ground-truth-test.npy" to compute evaluation metrics for the simple baseline. See the next section for how this is done.
-
-
 
 
 ## Evaluation and Metrics
@@ -59,6 +71,4 @@ F1 Weighted: 0.6948
 
 The positive F1 score of 0.0 for this simple baseline arises because it always predicts the majority class, which in our dataset is non-hate (0). Since only ~20% of the posts are actually hate speech (1), the model never predicts any true positives. This shows that the model is not suitable for practical use, as it completely fails to identify any hate speech. While it may achieve 80% accuracy by predicting only non-hate (matching the ~80% majority class), it is unable to detect the presence of actual hate speech.
 
-
-
-
+**__Note to Grader:__** While the script returns multiple evaluation metrics, our primary metric for assessing model performance is the F1 score(i.e. Pos F1). The other metrics are provided solely for additional analysis.
