@@ -33,6 +33,8 @@ python score.py \
     --pred_labels_file simple-baseline-test-preds.npy
 ```
 
+**__Note to Grader:__** ground-truth-test.npy has been submitted along with the other deliverables of this assignment!
+
 ## Example Output
 
 ```
