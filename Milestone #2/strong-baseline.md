@@ -66,7 +66,7 @@ The above files contain the below evaluation metrics:
 - **neg_precision:** Of the posts predicted as non-hateful (`0`), the fraction that are actually non-hateful. Formula: `TN / (TN + FN)`.  
 - **neg_recall:** Of all truly non-hateful posts, the fraction correctly identified as non-hateful. Formula: `TN / (TN + FP)`.  
 - **pos_f1:** F1 score for the hateful class, harmonic mean of Pos Precision and Pos Recall. Formula: `2 * (Precision * Recall) / (Precision + Recall)`.  
-- **neg_f1:** F1 score for the non-hateful class, harmonic mean of Neg Precision and Neg Recall.  
+- **neg_f1:** F1 score for the non-hateful class, harmonic mean of Neg Precision and Neg Recall. Formula: `2 * (Precision * Recall) / (Precision + Recall)`.
 - **f1_macro:** Average of Pos F1 and Neg F1, treating both classes equally regardless of class frequency.  
 - **f1_micro:** Global F1 considering total true positives, false positives, and false negatives across all classes.  
 - **f1_weighted:** Average of Pos F1 and Neg F1 weighted by the number of instances in each class.
