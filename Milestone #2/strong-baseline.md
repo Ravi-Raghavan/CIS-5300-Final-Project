@@ -71,7 +71,7 @@ The above files contain the below evaluation metrics:
 - **f1_micro:** Global F1 considering total true positives, false positives, and false negatives across all classes.  
 - **f1_weighted:** Average of Pos F1 and Neg F1 weighted by the number of instances in each class.
 
-**__Note to Grader:__** While multiple evaluation metrics are saved in the above files, our primary metric for assessing model performance is the F1 score. The other metrics are provided solely for additional analysis.
+**__Note to Grader:__** While multiple evaluation metrics are saved in the above files, our primary metric for assessing model performance is the F1 score(i.e. pos_f1). The other metrics are provided solely for additional analysis.
 
 🔑 Metric Prefixes
 
