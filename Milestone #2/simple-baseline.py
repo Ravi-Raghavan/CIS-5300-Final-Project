@@ -7,9 +7,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 random_state = 42
 
 # Load data
-train_df = pd.read_csv('.../data/train_data.csv')
-dev_df = pd.read_csv('.../data/dev_data.csv')
-test_df = pd.read_csv('.../data/test_data.csv')
+train_df = pd.read_csv('../data/train_data.csv')
+dev_df = pd.read_csv('../data/dev_data.csv')
+test_df = pd.read_csv('../data/test_data.csv')
 
 # Define a Majority Class Model
 class MajorityClassModel:
