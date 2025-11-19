@@ -38,6 +38,7 @@ according to the following folder structure
 ```
 
 ▶️ Running the Script
+
 To execute the BERT fine-tuning, execute the following command from within the src folder
 ```python
 python strong-baseline.py
