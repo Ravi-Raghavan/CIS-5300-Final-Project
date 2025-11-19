@@ -18,13 +18,13 @@ def compute_metrics(y_true, y_pred):
 
 # Parse arguments from command line
 parser = argparse.ArgumentParser()
-parser.add_argument('--true_labels', nargs='+', type=int, required=True, help='List of ground truth labels')
-parser.add_argument('--pred_labels', nargs='+', type=int, required=True, help='List of predicted labels')
+parser.add_argument('--true_labels_file', type=str, required=True, help='Path to .npy file containing ground truth labels')
+parser.add_argument('--pred_labels_file', type=str, required=True, help='Path to .npy file containing predicted labels')
 args = parser.parse_args()
 
 # --- Ground Truth and Predicted Labels  ---
-y_true = np.array(args.true_labels)
-y_pred = np.array(args.pred_labels)
+y_true = np.load(args.true_labels_file)
+y_pred = np.load(args.pred_labels_file)
 
 # --- Compute metrics ---
 metrics = compute_metrics(y_true, y_pred)

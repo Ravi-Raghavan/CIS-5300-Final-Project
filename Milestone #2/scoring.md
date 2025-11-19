@@ -20,7 +20,7 @@ In this section, we review prior works that utilize the F1 score as a primary ev
 Both studies leverage the MetaHate dataset and report the F1 score to assess the effectiveness of their proposed approaches in identifying hate speech.
 
 # Running score.py
-You can pass lists of ground truth and predicted labels directly as command-line arguments. Each list should contain integers `0` or `1`, where:
+Pass NumPy files (`.npy`) containing the ground truth and predicted labels. Each file contains a NumPy array of integers `0` or `1`, where:
 
 - `0` represents a non-hateful post  
 - `1` represents a hateful post  
@@ -29,11 +29,11 @@ You can pass lists of ground truth and predicted labels directly as command-line
 
 ```bash
 python score.py \
-    --true_labels 0 0 1 1 0 1 0 1  \
-    --pred_labels 0 1 1 1 0 0 0 1
+    --true_labels_file ground-truth-test.npy  \
+    --pred_labels_file simple-baseline-predictions.npy
 ```
 
-## Example outputs
+## Example Output
 
 ```
 Accuracy: 0.7500
