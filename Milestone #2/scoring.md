@@ -2,11 +2,9 @@
 This project focuses on leveraging state-of-the-art (SOTA) NLP techniques for hate speech detection using the MetaHate dataset, a unified benchmark for this task. Specifically, given a social media post, the goal is to classify it as hateful or non-hateful. Since this is a binary classification problem, the F1 score will be used as the primary evaluation metric, as it balances Precision and Recall—two critical aspects in hate speech detection. Recall captures the proportion of actual hate speech posts correctly identified by the model, ensuring harmful content is not overlooked. Precision measures the proportion of posts labeled as hate speech that are truly hateful, reducing the risk of mislabeling benign content and unnecessarily restricting users’ expression. For social media platforms represented in the MetaHate dataset, both metrics are essential: missing hate speech allows harmful content to spread, while false positives can unfairly penalize users. Striking the right balance ensures the platform remains safe and inclusive without over-censoring legitimate expression, maintaining trust and engagement among users. In this work, the F1 score is computed specifically for the hate speech class (labeled as 1 in our dataset), as correctly identifying hateful content is our primary concern.
 
 Mathematically, Precision, Recall, and F1 score are defined as follows: 
-$$
-\text{Precision} = \frac{TP}{TP + FP}, \quad
-\text{Recall} = \frac{TP}{TP + FN}, \quad
-\text{F1 score} = \frac{2 \cdot \text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}
-$$
+- Precision = TP / (TP + FP)
+- Recall = TP / (TP + FN)
+- F1 Score: (2 * Precision * Recall) / (Precision + Recall)
 
 where TP, FP, and FN denote the number of true positives, false positives, and false negatives, respectively. The F1 score provides a single metric that balances Precision and Recall, making it particularly suitable for tasks like hate speech detection where both false negatives and false positives carry significant consequences.
 
