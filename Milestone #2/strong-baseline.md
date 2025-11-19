@@ -1,12 +1,10 @@
 # Strong Baseline: Fine-Tuned BERT Model
 
 ## Overview
-This strong baseline uses a fine-tuned **BERT (bert-base-uncased)** model to perform hate speech classification. Unlike the majority-class baseline, this model leverages contextual language representations learned during pre-training and adapts them to our dataset through supervised fine-tuning.  
-
-All text is tokenized using BERT’s tokenizer with **truncation** and **max-length padding (512 tokens)** to ensure consistency across samples.
+This strong baseline leverages a fine-tuned BERT model (bert-base-uncased) for hate speech detection. Unlike a simple majority-class classifier, this model benefits from the rich contextual language representations learned during BERT’s pre-training and adapts them to the MetaHate dataset via supervised fine-tuning. All social media posts in the MetaHate dataset are tokenized using BERT’s tokenizer with truncation and padding to a maximum sequence length of 512 tokens, enabling batch processing.
 
 ## Handling Class Imbalance
-To account for class imbalance in the training data, we apply a **class-weighted cross-entropy loss**, where class weights are computed from the inverse frequencies of labels in the training set. The custom loss is implemented by subclassing Hugging Face’s `Trainer`.
+To address the class imbalance in the dataset—where hateful posts make up only about 20% of the training data while non-hateful posts constitute the remaining 80%—we employ a class-weighted cross-entropy loss. The weights are determined based on the proportion of each class in the training data, so that the model gives more emphasis to the minority class (hateful posts) during training. This custom loss is implemented by subclassing Hugging Face’s Trainer class, which allows the model to learn effectively from both classes while avoiding being biased toward the majority class.
 
 ## Training Setup
 - **Epochs:** 3  
