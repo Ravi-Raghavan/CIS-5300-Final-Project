@@ -23,17 +23,72 @@ After training, the model is evaluated on the held-out **test set**. The evaluat
 
 These results demonstrate that the fine-tuned BERT model substantially outperforms the majority-class baseline, establishing a strong performance threshold for future models.
 
-To get these metrics simply run:
+## Usage Instructions
+Please make sure to have the training data (`train_data.csv`), validation data (`dev_data.csv`), and test data (`test_data.csv`) arranged 
+according to the following folder structure
 
+📁 Folder Structure
+```text
+├── data/
+│   ├── train_data.csv
+│   ├── dev_data.csv
+│   └── test_data.csv
+├── src/
+│   ├── strong-baseline.py # Script for Strong baseline
+```
+
+▶️ Running the Script
+To execute the BERT fine-tuning, execute the following command from within the src folder
 ```python
 python strong-baseline.py
 ```
 
-It will store all the metrics in a .csv file.
+Once the above command is executed the following operations will occur: 
+1. Load the dataset
+2. Compute class imbalance
+3. Define a weighted cross-entropy loss
+4. Tokenize using bert-base-uncased
+5. Train for 3 epochs (batch size 32, LR = 5e-5)
+6. Save checkpoints every 50 steps
+7. Evaluate on train/dev/test
+8. Save evaluation metrics in CSV files
 
-## Sample Inputs and Outputs
-The model can also generate predictions for individual text samples. For example:
+At the end of execution, you will see the following three files in your directory
+- strong-baseline-train-results.csv: List of evaluation metrics on Training Dataset
+- strong-baseline-dev-results.csv: List of evaluation metrics on Validation/Dev Dataset
+- strong-baseline-test-results.csv: List of evaluation metrics on Test Dataset
 
-Input: "You people should go back to your disgusting countries"
+📊 Output Metrics
+The above files contain the below evaluation metrics:
+- **accuracy:** Overall proportion of correctly classified posts (both hateful and non-hateful).  
+- **pos_precision:** Of the posts predicted as hateful (`1`), the fraction that are actually hateful. Formula: `TP / (TP + FP)`.  
+- **pos_recall:** Of all truly hateful posts, the fraction correctly identified as hateful. Formula: `TP / (TP + FN)`.  
+- **neg_precision:** Of the posts predicted as non-hateful (`0`), the fraction that are actually non-hateful. Formula: `TN / (TN + FN)`.  
+- **neg_recall:** Of all truly non-hateful posts, the fraction correctly identified as non-hateful. Formula: `TN / (TN + FP)`.  
+- **pos_f1:** F1 score for the hateful class, harmonic mean of Pos Precision and Pos Recall. Formula: `2 * (Precision * Recall) / (Precision + Recall)`.  
+- **neg_f1:** F1 score for the non-hateful class, harmonic mean of Neg Precision and Neg Recall.  
+- **f1_macro:** Average of Pos F1 and Neg F1, treating both classes equally regardless of class frequency.  
+- **f1_micro:** Global F1 considering total true positives, false positives, and false negatives across all classes.  
+- **f1_weighted:** Average of Pos F1 and Neg F1 weighted by the number of instances in each class.
 
-Output: "1" (Hate Speech)
+**__Note to Grader:__** While multiple evaluation metrics are saved in the above files, our primary metric for assessing model performance is the F1 score. The other metrics are provided solely for additional analysis.
+
+🔑 Metric Prefixes
+
+All metrics in the saved CSVs are prefixed by the split:
+
+| Split | Prefix   | Example Metrics                                 |
+|-------|----------|--------------------------------------------------|
+| Train | `train_` | `train_accuracy`, `train_pos_f1`, `train_f1_macro` |
+| Dev   | `dev_`   | `dev_neg_precision`, `dev_pos_recall`, `dev_f1_micro` |
+| Test  | `test_`  | `test_f1_weighted`, `test_neg_recall`, `test_accuracy` |
+
+
+💾 Saving the Model
+
+During training and at the end of training, the checkpointed models, final model, and Hugging Face trainer state are saved to:
+```mathematica
+Milestone2-Baseline-BERT-FineTuning/
+Milestone2-Baseline-BERT-FinalModel/
+trainer_state.json
+```
