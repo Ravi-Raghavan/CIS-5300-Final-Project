@@ -62,4 +62,4 @@ F1 Weighted: 0.7500
 - **F1 Weighted:** Average of Pos F1 and Neg F1 weighted by the number of instances in each class.
 
 
-**__Note to Grader:__** While the script returns multiple evaluation metrics, our primary metric for assessing model performance is the F1 score. The other metrics are provided solely for additional analysis.
+**__Note to Grader:__** While the script returns multiple evaluation metrics, our primary metric for assessing model performance is the F1 score(i.e. Pos F1). The other metrics are provided solely for additional analysis.
