@@ -26,8 +26,10 @@ These results demonstrate that the fine-tuned BERT model substantially outperfor
 To get these metrics simply run:
 
 ```python
-generate_evaluation_results("test")
+python strong-baseline.py
 ```
+
+It will store all the metrics in a .csv file.
 
 ## Sample Inputs and Outputs
 The model can also generate predictions for individual text samples. For example:
