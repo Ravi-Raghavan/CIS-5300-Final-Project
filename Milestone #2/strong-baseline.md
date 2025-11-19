@@ -60,6 +60,7 @@ At the end of execution, you will see the following three files in your director
 - strong-baseline-test-results.csv: List of evaluation metrics on Test Dataset
 
 📊 Output Metrics
+
 The above files contain the below evaluation metrics:
 - **accuracy:** Overall proportion of correctly classified posts (both hateful and non-hateful).  
 - **pos_precision:** Of the posts predicted as hateful (`1`), the fraction that are actually hateful. Formula: `TP / (TP + FP)`.  
