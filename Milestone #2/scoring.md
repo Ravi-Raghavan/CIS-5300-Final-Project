@@ -30,7 +30,7 @@ Pass NumPy files (`.npy`) containing the ground truth and predicted labels. Each
 ```bash
 python score.py \
     --true_labels_file ground-truth-test.npy  \
-    --pred_labels_file simple-baseline-predictions.npy
+    --pred_labels_file simple-baseline-test-preds.npy
 ```
 
 ## Example Output

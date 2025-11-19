@@ -23,8 +23,8 @@ parser.add_argument('--pred_labels_file', type=str, required=True, help='Path to
 args = parser.parse_args()
 
 # --- Ground Truth and Predicted Labels  ---
-y_true = np.load(args.true_labels_file)
-y_pred = np.load(args.pred_labels_file)
+y_true = np.load(args.true_labels_file).flatten()
+y_pred = np.load(args.pred_labels_file).flatten()
 
 # --- Compute metrics ---
 metrics = compute_metrics(y_true, y_pred)
