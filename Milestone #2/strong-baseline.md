@@ -25,7 +25,7 @@ These results demonstrate that the fine-tuned BERT model substantially outperfor
 Please make sure to have the training data (`train_data.csv`), validation data (`dev_data.csv`), and test data (`test_data.csv`) arranged 
 according to the following folder structure
 
-📁 Folder Structure
+Folder Structure
 ```text
 ├── data/
 │   ├── train_data.csv
@@ -35,7 +35,7 @@ according to the following folder structure
 │   ├── strong-baseline.py # Script for Strong baseline
 ```
 
-▶️ Running the Script
+Running the Script
 
 To execute the BERT fine-tuning, execute the following command from within the src folder
 ```python
@@ -57,7 +57,7 @@ At the end of execution, you will see the following three files in your director
 - strong-baseline-dev-results.csv: List of evaluation metrics on Validation/Dev Dataset
 - strong-baseline-test-results.csv: List of evaluation metrics on Test Dataset
 
-📊 Output Metrics
+Output Metrics
 
 The above files contain the below evaluation metrics:
 - **accuracy:** Overall proportion of correctly classified posts (both hateful and non-hateful).  
@@ -73,7 +73,7 @@ The above files contain the below evaluation metrics:
 
 **__Note to Grader:__** While multiple evaluation metrics are saved in the above files, our primary metric for assessing model performance is the F1 score(i.e. pos_f1). The other metrics are provided solely for additional analysis.
 
-🔑 Metric Prefixes
+Metric Prefixes
 
 All metrics in the saved CSVs are prefixed by the split:
 
@@ -84,7 +84,7 @@ All metrics in the saved CSVs are prefixed by the split:
 | Test  | `test_`  | `test_f1_weighted`, `test_neg_recall`, `test_accuracy` |
 
 
-💾 Saving the Model
+Saving the Model
 
 During training and at the end of training, the checkpointed models, final model, and Hugging Face trainer state are saved to:
 ```mathematica
