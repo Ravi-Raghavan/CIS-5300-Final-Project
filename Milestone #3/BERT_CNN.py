@@ -188,7 +188,10 @@ training_args = TrainingArguments(
     logging_strategy="steps",
     logging_steps=50,          # log every 50 steps
     report_to="none",
-    full_determinism=True
+    full_determinism=True,
+    load_best_model_at_end=True, # Load best model(i.e. one that has highest dev F1 score)
+    metric_for_best_model="pos_f1", # Metric used for model comparison
+    greater_is_better=True # Greater F1 score is better!
 )
 
 trainer = SubTrainer(
