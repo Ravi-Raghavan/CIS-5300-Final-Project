@@ -16,6 +16,7 @@ random_state = 42
 from transformers import BertTokenizer
 from transformers import BertModel
 from transformers import Trainer, TrainingArguments
+from transformers.modeling_outputs import SequenceClassifierOutput
 import evaluate
 from datasets import Dataset
 
@@ -116,7 +117,7 @@ class BertCNNClassifier(nn.Module):
         logits = self.fc2(x) # Shape: (Batch, 2)
 
         # Return model output
-        return {"logits": logits}
+        return SequenceClassifierOutput(logits=logits)
 
 model = BertCNNClassifier(bert_model_name, num_labels = 2) # num_labels = 2 since we have 2 classes!
 
