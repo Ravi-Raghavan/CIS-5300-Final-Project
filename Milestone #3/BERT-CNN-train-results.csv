@@ -1,0 +1,2 @@
+train_loss,train_accuracy,train_pos_precision,train_pos_recall,train_pos_f1,train_neg_precision,train_neg_recall,train_neg_f1,train_f1_macro,train_f1_micro,train_f1_weighted,train_runtime,train_samples_per_second,train_steps_per_second,epoch
+0.3440953195095062,0.887047337949824,0.6853454390693715,0.8629867809932119,0.7639756463983554,0.9604190318918361,0.8935138508809832,0.9257591961598727,0.8448674212791141,0.887047337949824,0.8914887791028865,406.0748,65.079,2.034,3.0
