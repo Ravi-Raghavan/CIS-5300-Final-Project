@@ -23,7 +23,7 @@ os.environ["USE_TF"] = "0"
 ## Set Random State for Reproducability
 random_state = 42
 
-!pip install evaluate
+#!pip install evaluate # Uncomment pip install command
 
 # Import Hugging Face Tooling
 from transformers import BertTokenizer
