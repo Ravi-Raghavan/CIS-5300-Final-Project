@@ -1,0 +1,2 @@
+test_loss,test_accuracy,test_pos_precision,test_pos_recall,test_pos_f1,test_neg_precision,test_neg_recall,test_neg_f1,test_f1_macro,test_f1_micro,test_f1_weighted,test_runtime,test_samples_per_second,test_steps_per_second,epoch
+0.45175912976264954,0.8592615012106537,0.6417370325693607,0.76,0.6958796599084369,0.9321212121212121,0.8859447004608295,0.9084465445953928,0.8021631022519149,0.8592615012106537,0.8634111876701902,110.8968,29.793,0.938,3.0
