@@ -16,3 +16,6 @@ Milestone3-BERT-CNN-FinalModel/
 
 Milestone3-BERT-BiLSTM-FineTuning/
 Milestone3-BERT-BiLSTM-FinalModel/
+
+# Don't push pycache
+*pycache*
