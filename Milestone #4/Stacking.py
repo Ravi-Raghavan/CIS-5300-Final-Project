@@ -320,3 +320,7 @@ if os.path.exists(test_logits_path):
 else:
     test_logits = fetch_logits(ensemble, test_loader)
     np.save(test_logits_path, test_logits)
+
+print(f"Compute Shape of train_logits: {train_logits.shape}")
+print(f"Compute Shape of dev_logits: {dev_logits.shape}")
+print(f"Compute Shape of test_logits: {test_logits.shape}")
