@@ -257,7 +257,7 @@ batch_size = 32
 train_dataset = TextDataset(train_df, tokenizer)
 dev_dataset  = TextDataset(dev_df, tokenizer)
 test_dataset = TextDataset(test_df, tokenizer)
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle = False)
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle = True)
 dev_loader  = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
