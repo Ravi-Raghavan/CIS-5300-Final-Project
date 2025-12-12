@@ -1,6 +1,8 @@
 # Import system tooling
 import sys
 import os
+from sklearn.linear_model import LogisticRegression
+from itertools import product
 import tqdm
 os.environ["USE_TF"] = "0"
 
@@ -264,6 +266,7 @@ test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 # Define function to fetch logits from all datasets
 def fetch_logits(ensemble, dataloader):
     all_logits = [] # Store All Logits
+    all_labels = [] # Store All Labels
 
     # Set up progress bar
     pbar = tqdm.tqdm(total=len(dataloader), desc="Fetching Logits...", ncols=100)
@@ -273,6 +276,7 @@ def fetch_logits(ensemble, dataloader):
             # Get Input IDs, Attention Mask
             input_ids = batch["input_ids"].to(device)
             attention_mask = batch["attention_mask"].to(device)
+            labels = batch["labels"].to(device)
 
             # Store logits per model
             per_model_logits = []
@@ -285,13 +289,14 @@ def fetch_logits(ensemble, dataloader):
 
             # stack shape: (batch_size, # of logits * ensemble size) and store in all_logits
             stacked = np.hstack(per_model_logits)
-            all_logits.extend(stacked)
+            all_logits.append(stacked)
+            all_labels.extend(labels.cpu().numpy().tolist())
 
             # Update progress bar
             pbar.update(1)
 
     pbar.close()
-    return np.concatenate(all_logits, axis = 0)
+    return np.concatenate(all_logits, axis = 0), np.array(all_labels)
 
 logits_cache = {
     "train": "train_logits.npy",
@@ -305,22 +310,107 @@ test_logits_path = logits_cache['test']
 
 if os.path.exists(train_logits_path):
     train_logits = np.load(train_logits_path)
+    train_labels = np.load("train_labels.npy")
 else:
-    train_logits = fetch_logits(ensemble, train_loader)
+    train_logits, train_labels = fetch_logits(ensemble, train_loader)
     np.save(train_logits_path, train_logits)
+    np.save("train_labels.npy", train_labels)
 
 if os.path.exists(dev_logits_path):
     dev_logits = np.load(dev_logits_path)
+    dev_labels = np.load("dev_labels.npy")
 else:
-    dev_logits = fetch_logits(ensemble, dev_loader)
+    dev_logits, dev_labels = fetch_logits(ensemble, dev_loader)
     np.save(dev_logits_path, dev_logits)
+    np.save("dev_labels.npy", dev_labels)
 
 if os.path.exists(test_logits_path):
     test_logits = np.load(test_logits_path)
+    test_labels = np.load("test_labels.npy")
 else:
-    test_logits = fetch_logits(ensemble, test_loader)
+    test_logits, test_labels = fetch_logits(ensemble, test_loader)
     np.save(test_logits_path, test_logits)
+    np.save("test_labels.npy", test_labels)
 
-print(f"Compute Shape of train_logits: {train_logits.shape}")
-print(f"Compute Shape of dev_logits: {dev_logits.shape}")
-print(f"Compute Shape of test_logits: {test_logits.shape}")
+print(f"Compute Shape of train_logits: {train_logits.shape}, Shape of Train Labels: {train_labels.shape}")
+print(f"Compute Shape of dev_logits: {dev_logits.shape}, Shape of Dev Labels: {dev_labels.shape}")
+print(f"Compute Shape of test_logits: {test_logits.shape}, Shape of Test Labels: {test_labels.shape}")
+
+# Create Logistic Regression Meta Learner
+param_grid = {
+    "C": [0.01, 0.1, 1, 10],           # regularization strength
+    "penalty": ["l1", "l2"],                
+    "max_iter": [200],
+    "class_weight":[{0: p1, 1: p0}]
+}
+
+log_reg = LogisticRegression() # Create Model
+
+# Store best param set
+best_params = None
+best_dev_f1 = 0
+best_model = None
+
+# Create list of param names + all combinations
+keys = list(param_grid.keys())
+values = list(param_grid.values())
+
+# Iterate through the param grid
+for combo in product(*values):
+    params = dict(zip(keys, combo))
+
+    if params["penalty"] == "l1":
+        solver = "liblinear"
+    else:
+        solver = "lbfgs"
+
+    model = LogisticRegression(
+        C=params["C"],
+        penalty=params["penalty"],
+        max_iter=params['max_iter'],
+        solver=solver,
+        class_weight=params["class_weight"],
+    )
+
+    # Train model
+    model.fit(train_logits, train_labels)
+
+    # Evaluate on Dev Set
+    dev_pred = model.predict(dev_logits)
+    dev_f1 = f1_score(dev_labels, dev_pred)
+
+    # Print Results
+    print(f"Parameter Set: {params}, Dev Results: {dev_f1}")
+
+    # If applicable, store best params
+    if dev_f1 > best_dev_f1:
+        best_dev_f1 = dev_f1
+        best_params = {**params}
+        best_model = model
+
+print("Best params:", best_params)
+print("Best dev F1:", best_dev_f1)
+
+# Compute necessary metrics
+def compute_metrics(model, X, y):
+    pred = model.predict(X)
+    return {
+        "accuracy": accuracy_score(y, pred),
+        "precision": precision_score(y, pred),
+        "recall": recall_score(y, pred),
+        "f1": f1_score(y, pred)
+    }
+
+# Compute all split metrics
+results = {
+    "train": compute_metrics(best_model, train_logits, train_labels),
+    "dev":   compute_metrics(best_model, dev_logits,   dev_labels),
+    "test":  compute_metrics(best_model, test_logits,  test_labels),
+}
+
+# Save each split as CSV
+for split_name, metrics in results.items():
+    df = pd.DataFrame([metrics])
+    filename = f"Stacking-{split_name}-results.csv"
+    df.to_csv(filename, index=False)
+    print(f"Saved: {filename}")

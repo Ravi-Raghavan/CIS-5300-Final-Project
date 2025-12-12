@@ -274,7 +274,7 @@ def hard_vote_predict(ensemble, dataloader):
             # Get Input IDs, Attention Mask, and Labels
             input_ids = batch["input_ids"].to(device)
             attention_mask = batch["attention_mask"].to(device)
-            labels = batch["labels"].to(device)
+            labels = batch["labels"].to(device) # Shape: (Batch Size, )
 
             # Store predictions per model
             per_model_preds = []
@@ -283,14 +283,14 @@ def hard_vote_predict(ensemble, dataloader):
             for m in ensemble:
                 out = m(input_ids=input_ids, attention_mask=attention_mask) # Get Model Output
                 logits = out.logits
-                preds = torch.argmax(logits, dim=1)
+                preds = torch.argmax(logits, dim=1) # Shape: (Batch Size, )
                 per_model_preds.append(preds.cpu().numpy())
 
             # stack shape: (ensemble size, batch_size)
             stacked = np.vstack(per_model_preds)
 
             # majority vote
-            final_preds = mode(stacked, axis = 0).mode.tolist()
+            final_preds = mode(stacked, axis = 0).mode.tolist() # Shape: (Batch Size, )
 
             # Store predictions + labels
             all_preds.extend(final_preds)
