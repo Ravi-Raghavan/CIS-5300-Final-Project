@@ -4,7 +4,7 @@ This directory contains the code for the CIS 5300 Term Project, including baseli
 
 ## How this README is organized
 - Short description for each file in this folder.
-- How to run the main scripts and what inputs/outputs to expect.
+- General Discription of Model Output Generation.
 
 ## File Description
 - [`simple-baseline.py`](simple-baseline.py): Contains the code for the simple baseline implementation from Milestone #2. A more detailed description and how to run it is in [`simple-baseline.md`](simple-baseline.md).
