@@ -35,4 +35,4 @@ metric_names = ["Accuracy", "Pos Precision", "Pos Recall", "Neg Precision", "Neg
 
 for name, value in zip(metric_names, metrics):
     if name == "Pos F1":
-        print(f"{name}: {value:.3f}")
+        print(f"{name}: {value:.4f}")
