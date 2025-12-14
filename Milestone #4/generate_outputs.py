@@ -1,4 +1,5 @@
 # Import system tooling
+import argparse
 import sys
 import os
 import tqdm
@@ -263,6 +264,36 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle = True)
 dev_loader  = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+# Define function to get single model output
+def get_single_model_output(model, dataloader):
+    all_preds = [] # Store All Predictions
+    all_labels = [] # Store All Labels
+
+    # Set up progress bar
+    pbar = tqdm.tqdm(total=len(dataloader), desc="Evaluating...", ncols=100)
+
+    with torch.no_grad():
+        for batch in dataloader:
+            # Get Input IDs, Attention Mask, and Labels
+            input_ids = batch["input_ids"].to(device)
+            attention_mask = batch["attention_mask"].to(device)
+            labels = batch["labels"].to(device) # Shape: (Batch Size, )
+
+            # get predictions from the model
+            out = model(input_ids=input_ids, attention_mask=attention_mask) # Get Model Output
+            logits = out.logits
+            preds = torch.argmax(logits, dim=1) # Shape: (Batch Size, )
+
+            # Store predictions + labels
+            all_preds.extend(preds.cpu().numpy().tolist())
+            all_labels.extend(labels.cpu().numpy().tolist())
+
+            # Update progress bar
+            pbar.update(1)
+
+    pbar.close()
+    return np.array(all_preds), np.array(all_labels)
+
 # Define Hard Voting Function
 def hard_vote_predict(ensemble, dataloader):
     all_preds = [] # Store All Predictions
@@ -388,6 +419,7 @@ def soft_vote_predict(ensemble, dataloader):
     pbar.close()
     return np.array(all_preds), np.array(all_labels)
 
+# Define Method for stacking
 def stacking():
     # Define function to fetch logits from all datasets
     def fetch_logits(ensemble, dataloader):
@@ -508,7 +540,7 @@ def stacking():
         # Print Results
         print(f"Parameter Set: {params}, Dev Results: {dev_f1}")
 
-        # If applicable, store best params
+        # Store best params
         if dev_f1 > best_dev_f1:
             best_dev_f1 = dev_f1
             best_params = {**params}
@@ -516,12 +548,10 @@ def stacking():
     
     # Get Predictions from best_model
     best_model_predictions = best_model.predict(test_logits)
+    return best_model_predictions, test_labels
     
-    
-
-
 # Evaluate and Save Results
-def generate_output_and_ground_truth(ensemble_method, ensemble, dataloader, split_name):
+def generate_output_and_ground_truth(ensemble_method, ensemble, dataloader):
     if ensemble_method == "Hard Vote":
         y_pred, y_true = hard_vote_predict(ensemble, dataloader)
     elif ensemble_method == "Soft Vote":
@@ -529,5 +559,53 @@ def generate_output_and_ground_truth(ensemble_method, ensemble, dataloader, spli
     elif ensemble_method == "Max Vote":
         y_pred, y_true = max_vote_predict(ensemble, dataloader)
     elif ensemble_method == "Stacking":
-        pass
-    return y_pred, y_true
+        y_pred, y_true = stacking(ensemble, dataloader)
+    elif ensemble_method == "BERT":
+        y_pred, y_true = get_single_model_output(BERT, dataloader)
+    elif ensemble_method == "BERT-LSTM":
+        y_pred, y_true = get_single_model_output(BERT_LSTM, dataloader)
+    elif ensemble_method == "BERT-CNN":
+        y_pred, y_true = get_single_model_output(BERT_CNN, dataloader)
+
+    text = test_df['text'].tolist()
+    return text, y_pred, y_true
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--ensemble_method",
+    type=str,
+    choices=[
+        "Hard Vote", "Soft Vote", "Max Vote",
+        "Stacking", "BERT", "BERT-LSTM", "BERT-CNN"
+    ],
+    help="Ensemble method to use"
+)
+parser.add_argument(
+    "--sanity",
+    action="store_true",
+    help="Run sanity check on test loader"
+)
+
+args = parser.parse_args()
+
+if args.sanity:
+    # Test Loader Functionality for Sanity
+    test1 = test_df['label'].to_numpy()
+    test2 = []
+    for batch in test_loader:
+        test2.extend(batch["labels"].to(device).cpu().numpy().tolist())
+
+    test2 = np.array(test2)
+
+    print(f"Are they Equal: {np.array_equal(test1, test2)}")
+
+if args.ensemble_method is not None:
+    print(f"Generating Output for {args.ensemble_method}")
+    text, y_pred, y_true = generate_output_and_ground_truth(
+        args.ensemble_method,
+        ensemble,
+        test_loader
+    )
+
+    np.save(f"{args.ensemble_method}-Predictions.npy", y_pred)
+    np.save(f"{args.ensemble_method}-GroundTruth.npy", y_true)

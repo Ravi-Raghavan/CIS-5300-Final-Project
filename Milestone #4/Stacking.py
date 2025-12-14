@@ -382,7 +382,7 @@ for combo in product(*values):
     # Print Results
     print(f"Parameter Set: {params}, Dev Results: {dev_f1}")
 
-    # If applicable, store best params
+    # Store best params
     if dev_f1 > best_dev_f1:
         best_dev_f1 = dev_f1
         best_params = {**params}
