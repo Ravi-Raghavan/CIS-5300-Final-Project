@@ -34,4 +34,4 @@ metric_names = ["Accuracy", "Pos Precision", "Pos Recall", "Neg Precision", "Neg
                 "Pos F1", "Neg F1", "F1 Macro", "F1 Micro", "F1 Weighted"]
 
 for name, value in zip(metric_names, metrics):
-        print(f"{name}: {value:.4f}")
+    print(f"{name}: {value:.4f}")
