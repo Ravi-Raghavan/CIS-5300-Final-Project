@@ -14,6 +14,7 @@ sys.path.append(Milestone_3)
 import pandas as pd
 import numpy as np
 import torch
+import torch.nn.functional as F
 from scipy.stats import mode
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
@@ -284,6 +285,7 @@ def max_vote_predict(ensemble, dataloader):
             for m in ensemble:
                 out = m(input_ids=input_ids, attention_mask=attention_mask) # Get Model Output
                 logits = out.logits
+                logits = F.softmax(logits, dim = 1)
                 per_model_logits.append(logits.cpu().numpy()) # Shape: (Batch Size, Number of Logits)
 
             # stack shape: (Batch Size, Number of Logits, # of Models in Ensemble)
