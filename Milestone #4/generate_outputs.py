@@ -2,6 +2,8 @@
 import sys
 import os
 import tqdm
+from itertools import product
+from sklearn.linear_model import LogisticRegression
 os.environ["USE_TF"] = "0"
 
 # Get path of Milestone #2 and Milestone #3
@@ -261,6 +263,47 @@ train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle = True)
 dev_loader  = DataLoader(dev_dataset, batch_size=batch_size, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+# Define Hard Voting Function
+def hard_vote_predict(ensemble, dataloader):
+    all_preds = [] # Store All Predictions
+    all_labels = [] # Store All Labels
+
+    # Set up progress bar
+    pbar = tqdm.tqdm(total=len(dataloader), desc="Evaluating...", ncols=100)
+
+    with torch.no_grad():
+        for batch in dataloader:
+            # Get Input IDs, Attention Mask, and Labels
+            input_ids = batch["input_ids"].to(device)
+            attention_mask = batch["attention_mask"].to(device)
+            labels = batch["labels"].to(device) # Shape: (Batch Size, )
+
+            # Store predictions per model
+            per_model_preds = []
+
+            # get predictions from each model
+            for m in ensemble:
+                out = m(input_ids=input_ids, attention_mask=attention_mask) # Get Model Output
+                logits = out.logits
+                preds = torch.argmax(logits, dim=1) # Shape: (Batch Size, )
+                per_model_preds.append(preds.cpu().numpy())
+
+            # stack shape: (ensemble size, batch_size)
+            stacked = np.vstack(per_model_preds)
+
+            # majority vote
+            final_preds = mode(stacked, axis = 0).mode.tolist() # Shape: (Batch Size, )
+
+            # Store predictions + labels
+            all_preds.extend(final_preds)
+            all_labels.extend(labels.cpu().numpy().tolist())
+
+            # Update progress bar
+            pbar.update(1)
+
+    pbar.close()
+    return np.array(all_preds), np.array(all_labels)
+
 # Define Maximum Voting Function
 def max_vote_predict(ensemble, dataloader):
     all_logits = [] # Store All Logits
@@ -303,35 +346,188 @@ def max_vote_predict(ensemble, dataloader):
     pbar.close()
     return np.array(all_preds), np.array(all_labels)
 
-# Evaluate and Save Results
-def evaluate_and_save(ensemble_method, ensemble, dataloader, split_name):
-    y_pred, y_true = max_vote_predict(ensemble, dataloader)
+# Define Soft Voting Function
+def soft_vote_predict(ensemble, dataloader):
+    all_logits = [] # Store All Logits
+    all_preds = [] # Store All Predictions
+    all_labels = [] # Store All Labels
 
-    acc = accuracy_score(y_true, y_pred)
-    pos_precision = precision_score(y_true, y_pred, pos_label = 1, zero_division=0)
-    pos_recall = recall_score(y_true, y_pred, pos_label = 1, zero_division=0)
-    neg_precision = precision_score(y_true, y_pred, pos_label = 0, zero_division=0)
-    neg_recall = recall_score(y_true, y_pred, pos_label = 0, zero_division=0)
-    pos_f1 = f1_score(y_true, y_pred, average = "binary", pos_label = 1, zero_division=0)
-    neg_f1 = f1_score(y_true, y_pred, average = "binary", pos_label = 0, zero_division=0)
-    f1_macro = f1_score(y_true, y_pred, average='macro', zero_division=0)
-    f1_micro = f1_score(y_true, y_pred, average='micro', zero_division=0)
-    f1_weighted = f1_score(y_true, y_pred, average='weighted', zero_division=0)
+    # Set up progress bar
+    pbar = tqdm.tqdm(total=len(dataloader), desc="Evaluating...", ncols=100)
 
-    # --- Print metrics ---
-    metrics = [acc, pos_precision, pos_recall, neg_precision, neg_recall, 
-               pos_f1, neg_f1, f1_macro, f1_micro, f1_weighted]
-    metric_names = ["Accuracy", "Pos Precision", "Pos Recall", "Neg Precision", "Neg Recall", 
-                    "Pos F1", "Neg F1", "F1 Macro", "F1 Micro", "F1 Weighted"]
+    with torch.no_grad():
+        for batch in dataloader:
+            # Get Input IDs, Attention Mask, and Labels
+            input_ids = batch["input_ids"].to(device)
+            attention_mask = batch["attention_mask"].to(device)
+            labels = batch["labels"].to(device) # Shape: (Batch Size, )
+
+            # Store logits per model
+            per_model_logits = []
+
+            # get predictions from each model
+            for m in ensemble:
+                out = m(input_ids=input_ids, attention_mask=attention_mask) # Get Model Output
+                logits = out.logits
+                per_model_logits.append(logits.cpu().numpy()) # Shape: (Batch Size, Number of Logits)
+
+            # stack shape: (Batch Size, Number of Logits, # of Models in Ensemble)
+            stacked = np.stack(per_model_logits, axis = -1)
+
+            # Soft Vote
+            avg_probs = np.mean(stacked, axis = -1) # Shape: (Batch Size, Number of Logits)
+            final_preds = np.argmax(avg_probs, axis = -1).tolist() # Shape: (Batch Size, )
+
+            # Store predictions + labels
+            all_preds.extend(final_preds)
+            all_labels.extend(labels.cpu().numpy().tolist())
+
+            # Update progress bar
+            pbar.update(1)
+
+    pbar.close()
+    return np.array(all_preds), np.array(all_labels)
+
+def stacking():
+    # Define function to fetch logits from all datasets
+    def fetch_logits(ensemble, dataloader):
+        all_logits = [] # Store All Logits
+        all_labels = [] # Store All Labels
+
+        # Set up progress bar
+        pbar = tqdm.tqdm(total=len(dataloader), desc="Fetching Logits...", ncols=100)
+
+        with torch.no_grad():
+            for batch in dataloader:
+                # Get Input IDs, Attention Mask
+                input_ids = batch["input_ids"].to(device)
+                attention_mask = batch["attention_mask"].to(device)
+                labels = batch["labels"].to(device)
+
+                # Store logits per model
+                per_model_logits = []
+
+                # get predictions from each model
+                for m in ensemble:
+                    out = m(input_ids=input_ids, attention_mask=attention_mask) # Get Model Output
+                    logits = out.logits
+                    per_model_logits.append(logits.cpu().numpy())
+
+                # stack shape: (batch_size, # of logits * ensemble size) and store in all_logits
+                stacked = np.hstack(per_model_logits)
+                all_logits.append(stacked)
+                all_labels.extend(labels.cpu().numpy().tolist())
+
+                # Update progress bar
+                pbar.update(1)
+
+        pbar.close()
+        return np.concatenate(all_logits, axis = 0), np.array(all_labels)
+
+    logits_cache = {
+        "train": "train_logits.npy",
+        "dev":   "dev_logits.npy",
+        "test":  "test_logits.npy",
+    }
+
+    train_logits_path = logits_cache['train']
+    dev_logits_path = logits_cache['dev']
+    test_logits_path = logits_cache['test']
+
+    if os.path.exists(train_logits_path):
+        train_logits = np.load(train_logits_path)
+        train_labels = np.load("train_labels.npy")
+    else:
+        train_logits, train_labels = fetch_logits(ensemble, train_loader)
+        np.save(train_logits_path, train_logits)
+        np.save("train_labels.npy", train_labels)
+
+    if os.path.exists(dev_logits_path):
+        dev_logits = np.load(dev_logits_path)
+        dev_labels = np.load("dev_labels.npy")
+    else:
+        dev_logits, dev_labels = fetch_logits(ensemble, dev_loader)
+        np.save(dev_logits_path, dev_logits)
+        np.save("dev_labels.npy", dev_labels)
+
+    if os.path.exists(test_logits_path):
+        test_logits = np.load(test_logits_path)
+        test_labels = np.load("test_labels.npy")
+    else:
+        test_logits, test_labels = fetch_logits(ensemble, test_loader)
+        np.save(test_logits_path, test_logits)
+        np.save("test_labels.npy", test_labels)
+
+    print(f"Compute Shape of train_logits: {train_logits.shape}, Shape of Train Labels: {train_labels.shape}")
+    print(f"Compute Shape of dev_logits: {dev_logits.shape}, Shape of Dev Labels: {dev_labels.shape}")
+    print(f"Compute Shape of test_logits: {test_logits.shape}, Shape of Test Labels: {test_labels.shape}")
+
+    # Create Logistic Regression Meta Learner
+    param_grid = {
+        "C": [0.01, 0.1, 1, 10],           # regularization strength
+        "penalty": ["l1", "l2"],                
+        "max_iter": [200],
+        "class_weight":[{0: p1, 1: p0}]
+    }
+
+    log_reg = LogisticRegression() # Create Model
+
+    # Store best param set
+    best_params = None
+    best_dev_f1 = 0
+    best_model = None
+
+    # Create list of param names + all combinations
+    keys = list(param_grid.keys())
+    values = list(param_grid.values())
+
+    # Iterate through the param grid
+    for combo in product(*values):
+        params = dict(zip(keys, combo))
+
+        if params["penalty"] == "l1":
+            solver = "liblinear"
+        else:
+            solver = "lbfgs"
+
+        model = LogisticRegression(
+            C=params["C"],
+            penalty=params["penalty"],
+            max_iter=params['max_iter'],
+            solver=solver,
+            class_weight=params["class_weight"],
+        )
+
+        # Train model
+        model.fit(train_logits, train_labels)
+
+        # Evaluate on Dev Set
+        dev_pred = model.predict(dev_logits)
+        dev_f1 = f1_score(dev_labels, dev_pred)
+
+        # Print Results
+        print(f"Parameter Set: {params}, Dev Results: {dev_f1}")
+
+        # If applicable, store best params
+        if dev_f1 > best_dev_f1:
+            best_dev_f1 = dev_f1
+            best_params = {**params}
+            best_model = model
     
-    # Create DataFrame
-    df = pd.DataFrame([metrics], columns=metric_names)
+    # Get Predictions from best_model
+    best_model_predictions = best_model.predict(test_logits)
+    
+    
 
-    # Save CSV file
-    filename = f"{ensemble_method}-{split_name}-results.csv"
-    df.to_csv(filename, index=False)
 
-# Evaluate!
-evaluate_and_save("Max-Voting", ensemble, train_loader, "train")
-evaluate_and_save("Max-Voting", ensemble, dev_loader, "dev")
-evaluate_and_save("Max-Voting", ensemble, test_loader, "test")
+# Evaluate and Save Results
+def generate_output_and_ground_truth(ensemble_method, ensemble, dataloader, split_name):
+    if ensemble_method == "Hard Vote":
+        y_pred, y_true = hard_vote_predict(ensemble, dataloader)
+    elif ensemble_method == "Soft Vote":
+        y_pred, y_true = soft_vote_predict(ensemble, dataloader)
+    elif ensemble_method == "Max Vote":
+        y_pred, y_true = max_vote_predict(ensemble, dataloader)
+    elif ensemble_method == "Stacking":
+        pass
+    return y_pred, y_true

@@ -332,4 +332,6 @@ def evaluate_and_save(ensemble_method, ensemble, dataloader, split_name):
     df.to_csv(filename, index=False)
 
 # Evaluate!
+evaluate_and_save("Soft-Voting", ensemble, train_loader, "train")
+evaluate_and_save("Soft-Voting", ensemble, dev_loader, "dev")
 evaluate_and_save("Soft-Voting", ensemble, test_loader, "test")
