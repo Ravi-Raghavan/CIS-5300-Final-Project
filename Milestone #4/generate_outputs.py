@@ -420,7 +420,7 @@ def soft_vote_predict(ensemble, dataloader):
     return np.array(all_preds), np.array(all_labels)
 
 # Define Method for stacking
-def stacking():
+def stacking(ensemble, dataloader):
     # Define function to fetch logits from all datasets
     def fetch_logits(ensemble, dataloader):
         all_logits = [] # Store All Logits
