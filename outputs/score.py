@@ -29,10 +29,9 @@ y_pred = np.load(args.pred_labels_file).flatten()
 # --- Compute metrics ---
 metrics = compute_metrics(y_true, y_pred)
 
-# --- Print required metrics ---
+# --- Print metrics ---
 metric_names = ["Accuracy", "Pos Precision", "Pos Recall", "Neg Precision", "Neg Recall", 
                 "Pos F1", "Neg F1", "F1 Macro", "F1 Micro", "F1 Weighted"]
 
 for name, value in zip(metric_names, metrics):
-    if name == "Pos F1":
         print(f"{name}: {value:.4f}")
