@@ -26,7 +26,7 @@ Each array is aligned index-wise with `test_labels.npy` (i.e. the Ground Truth T
   Ensemble predictions obtained via **hard voting**, where each base model votes for a class label and the majority label is selected. This was developed for Milestone #4.
 
 - **`Soft Vote-Predictions.npy`**  
-  Ensemble predictions obtained via **soft voting**, where predicted probabilities from multiple models are averaged before thresholding. This was developed for Milestone #4.
+  Ensemble predictions obtained via **soft voting**, where predicted probabilities from multiple models are averaged before a decision is made. This was developed for Milestone #4.
 
 - **`Max Vote-Predictions.npy`**  
   Ensemble predictions where we select the class with the maximum confidence score across all models. This was developed for Milestone #4.
