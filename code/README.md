@@ -29,15 +29,13 @@ This directory contains the code for the CIS 5300 Term Project, including baseli
 
 - [`BERT_LSTM.md`](BERT_LSTM.md): Markdown file providing detailed documentation for the BERT + LSTM model from Milestone #3
 
-- `Soft_Voting.py`, `Hard_Voting.py`, `Max_Voting.py`: Ensemble scripts that combine predictions from multiple models:
-	- `Soft_Voting.py`: Averages (or weights) predicted probabilities (logits) across models and selects the highest average probability per sample.
-	- `Hard_Voting.py`: Performs majority voting on discrete class predictions.
-	- `Max_Voting.py`: Selects class by choosing the model with the highest-confidence prediction per sample (or picks the class from model with max score).
-	Typical usage: collect individual model prediction files (e.g., `.npy` for logits or labels) and run `python3 Soft_Voting.py --preds model1.npy model2.npy ... --out soft-preds.npy`.
+- [`Soft_Voting.py`](Soft_Voting.py): Script used to implement a soft voting ensemble of BERT, BERT + CNN, and BERT + LSTM. Please refer to [`Soft_Voting.md`](Soft_Voting.md) for detailed documentation and instructions on running this script.
 
-- `Stacking.py`: Implements a stacking ensemble: uses out-of-fold predictions from base models as features to train a meta-classifier. It expects base-level predictions and ground truth on the dev set to train the stacker. Run as `python3 Stacking.py` (see the script for CLI options).
+- [`Hard_Voting.py`](Hard_Voting.py): Script used to implement a hard voting ensemble of BERT, BERT + CNN, and BERT + LSTM. Please refer to [`Hard_Voting.md`](Hard_Voting.md) for detailed documentation and instructions on running this script.
 
-- `Max_Voting.py`: 
+- [`Stacking.py`](Stacking.py): Script used to implement a stacking ensemble of BERT, BERT + CNN, and BERT + LSTM with a Logistic Regression meta-learner. Please refer to [`Stacking.md`](Stacking.md) for detailed documentation and instructions on running this script.
+
+- [`Max_Voting.py`](Max_Voting.py): Script used to implement a max voting ensemble of BERT, BERT + CNN, and BERT + LSTM. Please refer to [`Max_Voting.md`](Max_Voting.md) for detailed documentation and instructions on running this script.
 
 - [`Milestone #2 (Prepare Data).ipynb`](Milestone%20%232%20(Prepare%20Data).ipynb): Notebook used to prepare and explore the dataset for Milestone 2. It samples 3% of the original dataset and performs exploratory data analysis (EDA), including computing split statistics across training, development, and test sets, and investigating class imbalance.
 
