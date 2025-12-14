@@ -47,7 +47,7 @@ Each array is aligned index-wise with `test_labels.npy` (i.e. the Ground Truth T
 ## Documentation
 
 - **`README.md`**  
-  This file. It documents the evaluation metric choice, references prior work, explains how to run the evaluation, and describes the contents of the repository.
+  This file. It documents the evaluation metric choice, references prior work, explains how to run the evaluation, and describes the contents of the directory.
 
 
 # Description of Evaluation Measure
