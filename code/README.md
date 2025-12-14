@@ -1,34 +1,33 @@
+# Directory Overview
 
-**Project Overview**
+This directory contains the code for the CIS 5300 Term Project, including baseline models, extensions, and their corresponding markdown documentation.
 
-This folder contains code used for the CIS 5300 final project: models, baselines, ensembling scripts, and helpers used to train, evaluate, and generate outputs for a hate-speech detection task.
-
-**Quick Start**
-- **Python:** Use Python 3.8+.
-
-**How this README is organized**
+## How this README is organized
 - Short description for each file in this folder.
 - How to run the main scripts and what inputs/outputs to expect.
 
-**File Description**
-- `simple-baseline.py`: Contains the code for the simple baseline implementation from Milestone #2. A more detailed description and how to run it is in `simple-baseline.md`.
+## File Description
+- [`simple-baseline.py`](simple-baseline.py): Contains the code for the simple baseline implementation from Milestone #2. A more detailed description and how to run it is in [`simple-baseline.md`](simple-baseline.md).
 
-- `simple-baseline.md`: Documentation of the simple baseline
+- [`simple-baseline.md`](simple-baseline.md): Documentation of the simple baseline from Milestone #2. Contains a more detailed description of the simple baseline and instructions on how to run [`simple-baseline.py`](simple-baseline.py)
 
-- `strong-baseline.py`: A stronger classical baseline (e.g., richer preprocessing, feature engineering, or ensemble of classical models). Run with `python3 strong-baseline.py`.
+- [`strong-baseline.py`](strong-baseline.py): Contains the code for the strong baseline implementation from Milestone #2. A more detailed description and how to run it is in [`strong-baseline.md`](strong-baseline.md)
 
-- `strong-baseline.md`: Notes and evaluation results for the stronger baseline.
+- [`strong-baseline.md`](strong-baseline.md): Documentation of the strong baseline from Milestone #2. Contains a more detailed description of the strong baseline and instructions on how to run [`strong-baseline.py`](strong-baseline.py)
 
-- `score.py`: Utility used to compute evaluation metrics (accuracy, F1, precision, recall). Use it to score prediction files against ground truth. Typical usage from command line may look like `python3 score.py truth.npy preds.npy` (adapt arguments depending on the script signature).
+- [`score.py`](score.py): Utility used to compute evaluation metrics (accuracy, F1, precision, recall). Use it to obtain evaluation metrics by comparing prediction files against the ground truth. Typical usage from the command line: `python score.py --true_labels_file test_labels.npy --pred_labels_file prediction_file.npy`. More details will be provided below. 
 
-- `generate_outputs.py`: Script for converting model outputs into the final submission format (e.g., mapping logits to labels, writing CSV). Run after model predictions are produced: `python3 generate_outputs.py --preds preds.npy --out submission.csv` (check script flags for exact names).
+- [`scoring.md`](scoring.md): Markdown file providing detailed documentation on how to use `score.py`, including explanations of the evaluation metric, example commands, and guidelines for interpreting the results.
 
-- `BERT_CNN.py` and `BERT_LSTM.py`: Model training and evaluation scripts using a BERT encoder with a task-specific head:
-	- `BERT_CNN.py`: BERT plus convolutional layers (text-CNN head). Trains/fine-tunes the model and saves checkpoints and predictions.
-	- `BERT_LSTM.py`: BERT plus BiLSTM head. Similar behavior: training, evaluation, and saving predictions.
-	Run via `python3 BERT_CNN.py` or `python3 BERT_LSTM.py`. These scripts likely rely on `transformers` and `torch` and expect dataset paths (check the top of each script for CLI args or edit the paths inline).
+- [`generate_outputs.py`](generate_outputs.py): Script for generating final model outputs as a `.npy` file on the test dataset. Run after training the model and saving its weights. Typical usage from the command line: `python generate_outputs.py --ensemble_method="BERT"`. More details will be provided below. 
 
-- `BERT_CNN.md` and `BERT_LSTM.md`: Notebooks or notes describing model architectures, hyperparameters, and experiment results.
+- [`BERT_CNN.py`](BERT_CNN.py): Scripts used to train BERT + CNN as well as generate evaluation metrics on the Dev and Test Datasets. Please refer to [`BERT_CNN.md`](BERT_CNN.md) for more detailed documentation and how to run this script.
+
+- [`BERT_CNN.md`](BERT_CNN.md): Markdown file providing detailed documentation for the BERT + CNN model from Milestone #3
+
+- [`BERT_LSTM.py`](BERT_LSTM.py): Scripts used to train BERT + LSTM as well as generate evaluation metrics on the Dev and Test Datasets. Please refer to [`BERT_LSTM.md`](BERT_LSTM.md) for more detailed documentation and how to run this script.
+
+- [`BERT_LSTM.md`](BERT_LSTM.md): Markdown file providing detailed documentation for the BERT + LSTM model from Milestone #3
 
 - `Soft_Voting.py`, `Hard_Voting.py`, `Max_Voting.py`: Ensemble scripts that combine predictions from multiple models:
 	- `Soft_Voting.py`: Averages (or weights) predicted probabilities (logits) across models and selects the highest average probability per sample.
@@ -38,17 +37,15 @@ This folder contains code used for the CIS 5300 final project: models, baselines
 
 - `Stacking.py`: Implements a stacking ensemble: uses out-of-fold predictions from base models as features to train a meta-classifier. It expects base-level predictions and ground truth on the dev set to train the stacker. Run as `python3 Stacking.py` (see the script for CLI options).
 
-- `Max_Voting.py`: (same as above — included if present to emphasize variant) Use to select the max-confidence label across models.
+- `Max_Voting.py`: 
 
-- `Milestone #2 (Prepare Data).ipynb`: Notebook used to prepare and explore the dataset for Milestone 2. Contains preprocessing steps used by the baselines.
+- [`Milestone #2 (Prepare Data).ipynb`](Milestone%20%232%20(Prepare%20Data).ipynb): Notebook used to prepare and explore the dataset for Milestone 2. It samples 3% of the original dataset and performs exploratory data analysis (EDA), including computing split statistics across training, development, and test sets, and investigating class imbalance.
 
-- `score.py` (duplicate presence): There may be more than one `score.py` across the repo (e.g., top-level and Milestone folders). Use the one in the folder you intend to work with — they are utilities to compute metrics.
-
-**Inputs and Outputs (general)**
+## Inputs and Outputs (general)
 - Inputs: CSV files in the `data/` folder (`train_data.csv`, `dev_data.csv`, `test_data.csv`) and any saved model checkpoints in `Milestone*` folders.
 - Typical outputs: prediction `.npy` files, `*-results.csv` evaluation summaries, model checkpoints, and final submission CSVs.
 
-**How to reproduce common tasks**
+## How to reproduce common tasks
 - Run the simple baseline and save predictions:
 ```bash
 cd code
@@ -66,9 +63,3 @@ python3 BERT_CNN.py --train --data ../../data/train_data.csv --dev ../../data/de
 python3 Soft_Voting.py --preds modelA_logits.npy modelB_logits.npy --out soft_preds.npy
 python3 generate_outputs.py --preds soft_preds.npy --out submission.csv
 ```
-
-**Notes & Next Steps**
-- Inspect individual scripts for exact CLI arguments and available flags — many scripts contain argument parsers near the top.
-- If you'd like, I can:
-	- Add a `requirements.txt` listing precise package versions used in experiments.
-	- Add usage examples for each script by reading their argument parsers and documenting flags.

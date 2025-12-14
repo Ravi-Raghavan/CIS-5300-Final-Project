@@ -1,57 +1,3 @@
-# Output Folder Overview
-
-This section explains the purpose of each file in this directory, to help the grader understand how predictions are generated and evaluated.
-
-## General
-
-All `.npy` files contain NumPy arrays of binary predictions (`0` or `1`) for the **test set**, where:
-- `0` = non-hateful post  
-- `1` = hateful post  
-
-Each array is aligned index-wise with `test_labels.npy` (i.e. the Ground Truth Test Labels).
-
-## Prediction Files (`.npy`)
-
-- **`BERT-Predictions.npy`**  
-  Predictions produced by the fine-tuned BERT classifier from Milestone #2. This serves as our strong baseline.
-
-- **`BERT-CNN-Predictions.npy`**  
-  Predictions from a hybrid BERT + CNN model, developed in Milestone #3. 
-
-- **`BERT-LSTM-Predictions.npy`**  
-  Predictions from a hybrid BERT + LSTM model, developed in Milestone #3. 
-
-- **`simple-baseline-test-preds.npy`**  
-  Predictions from a simple baseline model(majority classifier) developed in Milestone #2.
-
-- **`Hard Vote-Predictions.npy`**  
-  Ensemble predictions obtained via **hard voting**, where each base model votes for a class label and the majority label is selected. This was developed for Milestone #4.
-
-- **`Soft Vote-Predictions.npy`**  
-  Ensemble predictions obtained via **soft voting**, where predicted probabilities from multiple models are averaged before a decision is made. This was developed for Milestone #4.
-
-- **`Max Vote-Predictions.npy`**  
-  Ensemble predictions where we select the class with the maximum confidence score across all models. This was developed for Milestone #4.
-
-- **`Stacking-Predictions.npy`**  
-  Predictions from a **stacked ensemble**, where a meta-classifier is trained on the outputs of multiple base models. This was developed for Milestone #4.
-
-## Ground Truth Labels
-
-- **`test_labels.npy`**  
-  Ground-truth (gold) labels for the test set. This file is used by `score.py` to compute all evaluation metrics.
-
-## Evaluation Script
-
-- **`score.py`**  
-  A standalone evaluation script that loads a prediction file and the ground-truth labels, then reports Accuracy, Precision, Recall, and multiple F1 variants. While multiple metrics are reported, **Pos F1 (F1 score for the hateful class)** is the primary metric used for model comparison.
-
-## Documentation
-
-- **`README.md`**  
-  This file. It documents the evaluation metric choice, references prior work, explains how to run the evaluation, and describes the contents of the directory.
-
-
 # Description of Evaluation Measure
 This project focuses on leveraging state-of-the-art (SOTA) NLP techniques for hate speech detection using the MetaHate dataset, a unified benchmark for this task. Specifically, given a social media post, the goal is to classify it as hateful or non-hateful. Since this is a binary classification problem, the F1 score will be used as the primary evaluation metric, as it balances Precision and Recall—two critical aspects in hate speech detection. Recall captures the proportion of actual hate speech posts correctly identified by the model. Optimizing for recall ensures harmful content is not overlooked. Precision measures the proportion of posts labeled as hate speech that are truly hateful. Optimizing for precision reduces the risk of mislabeling benign content and unnecessarily restricting users’ expression. For social media platforms represented in the MetaHate dataset, both metrics are essential: missing hate speech allows harmful content to spread, while false positives can unfairly penalize users. Striking the right balance ensures the platform remains safe and inclusive without over-censoring legitimate expression, maintaining trust and engagement among users. In this work, the F1 score is computed specifically for the hate speech class (labeled as 1 in our dataset), as correctly identifying hateful content is our primary concern.
 
@@ -83,9 +29,11 @@ Pass NumPy files (`.npy`) containing the ground truth and predicted labels. Each
 
 ```bash
 python score.py \
-    --true_labels_file test_labels.npy  \
+    --true_labels_file ground-truth-test.npy  \
     --pred_labels_file simple-baseline-test-preds.npy
 ```
+
+**__Note to Grader:__** ground-truth-test.npy has been submitted along with the other deliverables of this assignment!
 
 ## Example Output
 
