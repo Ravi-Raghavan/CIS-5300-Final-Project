@@ -15,7 +15,7 @@ This directory contains the code for the CIS 5300 Term Project, including baseli
 
 - [`strong-baseline.md`](strong-baseline.md): Documentation of the strong baseline from Milestone #2. Contains a more detailed description of the strong baseline and instructions on how to run [`strong-baseline.py`](strong-baseline.py)
 
-- [`score.py`](score.py): Utility used to compute evaluation metrics (accuracy, F1, precision, recall). Use it to obtain evaluation metrics by comparing prediction files against the ground truth. Typical usage from the command line: `python score.py --true_labels_file test_labels.npy --pred_labels_file prediction_file.npy`. More details will be provided below. 
+- [`score.py`](score.py): Utility used to compute evaluation metrics (accuracy, F1, precision, recall). Use it to obtain evaluation metrics by comparing prediction files against the ground truth. Typical usage from the command line: `python score.py --true_labels_file test_labels.npy --pred_labels_file prediction_file.npy`. Execution details are available in  [`scoring.md`](scoring.md). However, we recommend executing this script from the output folder. Please refer to [`README.md`](../outputs/README.md) for details. 
 
 - [`scoring.md`](scoring.md): Markdown file providing detailed documentation on how to use `score.py`, including explanations of the evaluation metric, example commands, and guidelines for interpreting the results.
 
@@ -39,25 +39,59 @@ This directory contains the code for the CIS 5300 Term Project, including baseli
 
 - [`Milestone #2 (Prepare Data).ipynb`](Milestone%20%232%20(Prepare%20Data).ipynb): Notebook used to prepare and explore the dataset for Milestone 2. It samples 3% of the original dataset and performs exploratory data analysis (EDA), including computing split statistics across training, development, and test sets, and investigating class imbalance.
 
-## Inputs and Outputs (general)
-- Inputs: CSV files in the `data/` folder (`train_data.csv`, `dev_data.csv`, `test_data.csv`) and any saved model checkpoints in `Milestone*` folders.
-- Typical outputs: prediction `.npy` files, `*-results.csv` evaluation summaries, model checkpoints, and final submission CSVs.
+## Required Input Files
+- Inputs: CSV files in the `data/` folder (`train_data.csv`, `dev_data.csv`, `test_data.csv`)
+- Saved Model Weights: In addition to the data, you will also need the saved weights from Milestone #2 Fine-Tune of BERT Model, the saved weights from Milestone #3 training of BERT + CNN, and the saved weights from Milestone #3 training of BERT + LSTM. To access the weights, here is a Google Drive Link to a Shared Folder called [Model Weights](https://drive.google.com/drive/folders/1JdV65HwCtDd10AN_qBGzfz82W5dWcFil?usp=drive_link). Within this folder, you will see the following sub-folders
 
-## How to reproduce common tasks
-- Run the simple baseline and save predictions:
-```bash
-cd code
-python3 simple-baseline.py
-```
-- Train/fine-tune a BERT model (example):
-```bash
-cd code
-python3 BERT_CNN.py --train --data ../../data/train_data.csv --dev ../../data/dev_data.csv
-```
-(Check the script headers for actual argument names.)
+- Milestone2-Baseline-BERT-FinalModel (i.e. Saved Weights from Milestone #2 Fine-Tune of BERT Model)
+- Milestone3-BERT-CNN-FinalModel (i.e. Saved Weights from Milestone #3 Training of BERT + CNN)
+- Milestone3-BERT-BiLSTM-FinalModel (i.e. Saved Weights from Milestone #3 Training of BERT + LSTM)
 
-- Create ensemble predictions after you have model outputs:
-```bash
-python3 Soft_Voting.py --preds modelA_logits.npy modelB_logits.npy --out soft_preds.npy
-python3 generate_outputs.py --preds soft_preds.npy --out submission.csv
+Please download the above folders and structure your local repository as follows: 
+Required Folder Structure
+```text
+├── data/
+│   ├── train_data.csv
+│   ├── dev_data.csv
+│   └── test_data.csv
+├── Milestone #2/
+│   ├── Milestone2-Baseline-BERT-FinalModel # Saved Weights from Milestone #2 Fine-Tune of BERT Model
+├── Milestone #3/
+│   ├── Milestone3-BERT-CNN-FinalModel # Saved Weights from Milestone #3 Training of BERT + CNN
+│   ├── Milestone3-BERT-BiLSTM-FinalModel # Saved Weights from Milestone #3 Training of BERT + LSTM
 ```
+
+## General Outputs
+- Outputs: Prediction `.npy` files, `*-results.csv` containing evaluation results, and Model Checkpoints
+
+## How to generate model output?
+Final model predictions on the **test set** are generated using the script [`generate_outputs.py`](generate_outputs.py). This script loads the saved model weights from Milestone #2 and Milestone #3, runs inference on the test dataset, and saves predictions as `.npy` files for evaluation. Using these npy files and the ground truth file, the `score.py`(score.py) function can be used to produce evaluation metrics!
+
+### Supported Models and Ensemble Methods
+The script supports generating outputs for the following single models and ensemble methods:
+
+- **Single Models**
+  - `BERT`
+  - `BERT-CNN`
+  - `BERT-LSTM`
+
+- **Ensemble Methods**
+  - `Hard Vote`
+  - `Soft Vote`
+  - `Max Vote`
+  - `Stacking` (with Logistic Regression meta-learner)
+
+### Command-Line Usage
+Run the script from the directory containing `generate_outputs.py`:
+
+```bash
+python generate_outputs.py --ensemble_method "<METHOD_NAME>"
+```
+where <METHOD_NAME> is any one of: 
+  - `BERT`
+  - `BERT-CNN`
+  - `BERT-LSTM`
+  - `Hard Vote`
+  - `Soft Vote`
+  - `Max Vote`
+  - `Stacking`

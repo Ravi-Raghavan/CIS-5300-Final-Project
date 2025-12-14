@@ -5,6 +5,8 @@ This extension implements a **Soft Voting ensemble classifier** that combines th
 
 The motivation behind this approach is to leverage complementary inductive biases across architectures while retaining confidence information from each model. The baseline BERT captures rich contextual semantics, the CNN-based model emphasizes local n-gram patterns, and the BiLSTM-based model captures sequential dependencies. By aggregating probabilistic outputs rather than hard labels, soft voting allows more confident models to exert greater influence, often leading to improved stability and performance without requiring additional training.
 
+> **Note to Grader:** The base learners in this ensemble were **not retrained**. As described later in this document, we reuse the pretrained models from previous milestones as fixed base learners, with no additional weight updates performed.
+
 ## Evaluation and Metrics
 The model is evaluated on the held-out **test set**. Using `sklearn` tooling, this script reports metrics including accuracy, precision, recall, and F1 for both classes. The test-set performance of the Soft Voting Ensemble Model is:
 

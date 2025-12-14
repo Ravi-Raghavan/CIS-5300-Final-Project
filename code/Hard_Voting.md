@@ -5,6 +5,7 @@ This extension implements a **Hard Voting ensemble classifier** that combines th
 
 The motivation behind this approach is to leverage complementary inductive biases across architectures. While the baseline BERT captures rich contextual semantics, the CNN-based model emphasizes local n-gram patterns, and the BiLSTM-based model captures sequential dependencies. Hard voting provides a simple, interpretable ensembling strategy that does not require additional training and helps reduce variance by aggregating diverse model decisions.
 
+> **Note to Grader:** The base learners in this ensemble were **not retrained**. As described later in this document, we reuse the pretrained models from previous milestones as fixed base learners, with no additional weight updates performed.
 
 ## Evaluation and Metrics
 The model is evaluated on the held-out **test set**. Using `sklearn` tooling, this script reports metrics including accuracy, precision, recall, and F1 for both classes. The test-set performance of the Hard Voting Ensemble Model is:

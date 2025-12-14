@@ -5,6 +5,8 @@ This extension implements a **Max Voting ensemble classifier** that combines the
 
 The motivation behind Max Voting is to allow the most confident model to dominate the final decision on a per-instance basis. This is particularly useful when one architecture is better suited to a specific linguistic pattern or context. The baseline BERT captures rich contextual semantics, the CNN-based model emphasizes local n-gram features, and the BiLSTM-based model captures sequential dependencies. By selecting the strongest signal among these models rather than averaging them, Max Voting can better preserve high-confidence predictions and reduce the dilution of decisive model outputs.
 
+> **Note to Grader:** The base learners in this ensemble were **not retrained**. As described later in this document, we reuse the pretrained models from previous milestones as fixed base learners, with no additional weight updates performed.
+
 ## Evaluation and Metrics
 The model is evaluated on the held-out **test set**. Using `sklearn` tooling, this script reports metrics including accuracy, precision, recall, and F1 for both classes. The test-set performance of the Max Voting Ensemble Model is:
 

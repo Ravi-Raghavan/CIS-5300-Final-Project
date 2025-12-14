@@ -80,6 +80,7 @@ Pass NumPy files (`.npy`) containing the ground truth and predicted labels. Each
 - `1` represents a hateful post  
 
 ## Example Command
+We note that `true_labels_file` denotes the ground truth npy file and `pred_labels_file` denotes the model predictions npy file 
 
 ```bash
 python score.py \
