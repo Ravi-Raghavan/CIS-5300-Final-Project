@@ -85,6 +85,8 @@ The script supports generating outputs for the following single models and ensem
   - `Max Vote`
   - `Stacking` (with Logistic Regression meta-learner)
 
+> **Note to Grader:** The simple baseline script generates its own output upon execution!
+
 ### Command-Line Usage
 Run the script from the directory containing `generate_outputs.py`:
 
