@@ -39,6 +39,10 @@ This directory contains the code for the CIS 5300 Term Project, including baseli
 
 - [`Milestone #2 (Prepare Data).ipynb`](Milestone%20%232%20(Prepare%20Data).ipynb): Notebook used to prepare and explore the dataset for Milestone 2. It samples 3% of the original dataset and performs exploratory data analysis (EDA), including computing split statistics across training, development, and test sets, and investigating class imbalance.
 
+- [`Error_Analysis_Dhruv.ipynb](Error_Analysis_Dhruv.ipynb): Notebook for performing error analysis on the best-performing system, categorizing both false positives and false negatives to understand the types and prevalence of errors.
+
+- [`error_analysis.ipynb`](error_analysis.ipynb): Notebook for analyzing and comparing error types between the strong baseline and the best-performing system.
+
 ## Required Input Files
 - Inputs: CSV files in the `data/` folder (`train_data.csv`, `dev_data.csv`, `test_data.csv`)
 - Saved Model Weights: In addition to the data, you will also need the saved weights from Milestone #2 Fine-Tune of BERT Model, the saved weights from Milestone #3 training of BERT + CNN, and the saved weights from Milestone #3 training of BERT + LSTM. To access the weights, here is a Google Drive Link to a Shared Folder called [Model Weights](https://drive.google.com/drive/folders/1JdV65HwCtDd10AN_qBGzfz82W5dWcFil?usp=drive_link). Within this folder, you will see the following sub-folders
