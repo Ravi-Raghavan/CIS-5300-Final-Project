@@ -39,7 +39,7 @@ This directory contains the code for the CIS 5300 Term Project, including baseli
 
 - [`Milestone #2 (Prepare Data).ipynb`](Milestone%20%232%20(Prepare%20Data).ipynb): Notebook used to prepare and explore the dataset for Milestone 2. It samples 3% of the original dataset and performs exploratory data analysis (EDA), including computing split statistics across training, development, and test sets, and investigating class imbalance.
 
-- [`Error_Analysis_Dhruv.ipynb](Error_Analysis_Dhruv.ipynb): Notebook for performing error analysis on the best-performing system, categorizing both false positives and false negatives to understand the types and prevalence of errors.
+- [`Error_Analysis_Dhruv.ipynb`](Error_Analysis_Dhruv.ipynb): Notebook for performing error analysis on the best-performing system, categorizing both false positives and false negatives to understand the types and prevalence of errors.
 
 - [`error_analysis.ipynb`](error_analysis.ipynb): Notebook for analyzing and comparing error types between the strong baseline and the best-performing system.
 
