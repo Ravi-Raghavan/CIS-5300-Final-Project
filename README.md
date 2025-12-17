@@ -10,5 +10,5 @@ This repository also contains our presentation slides as a PDF, presentation vid
 - [`data/`](data/README.md): Contains all datasets used for the project across train/dev/test
 - [`outputs/`](outputs/README.md): Contains model outputs, ground truth labels, and scoring scripts
 - [`presentation/`](presentation/): Contains the presentation slides as a PDF
-- `video/`: Contains a video recording of our presentation
+- [`video/`](video/): Contains a video recording of our presentation
 - `report/`: Contains a PDF of our final report
